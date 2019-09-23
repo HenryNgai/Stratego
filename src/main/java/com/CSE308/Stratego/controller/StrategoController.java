@@ -1,20 +1,17 @@
 package com.CSE308.Stratego.controller;
-import com.CSE308.Stratego.model.dao.BoardPieceRepository;
+import com.CSE308.Stratego.model.Services;
+import com.CSE308.Stratego.model.dao.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
 public class StrategoController {
+    @Autowired LoginRepository loginRepository;
+    @Autowired Services services;
 
-    @Autowired
-    private BoardPieceRepository boardPieceRepository;
-
-    @GetMapping("/login")
+    @GetMapping("/")
     public String login() {
         return "login";
     }
@@ -32,6 +29,17 @@ public class StrategoController {
     @GetMapping("game")
     public String game(){
         return "game";
+    }
+
+    @PostMapping("/validate_login")
+
+    public String validate_login(@RequestParam String username, @RequestParam String password){
+        if (services.validate_login_function(username, password)) {
+            return "home";
+        }
+        else{
+            return "Invalid login please refresh the page and try again try again";
+        }
     }
 
 
