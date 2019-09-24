@@ -32,10 +32,9 @@ public class StrategoController {
     }
 
     @PostMapping("/validate_login")
-
     public String validate_login(@RequestParam String username, @RequestParam String password){
         if (services.validate_login_function(username, password)) {
-            return "home";
+            return "menu";
         }
         else{
             return "Invalid login please refresh the page and try again try again";
