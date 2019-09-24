@@ -1,0 +1,9 @@
+#Menu{
+	align-content: center;
+}
+#Menu_Div{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	background-color: lightgrey;
+}

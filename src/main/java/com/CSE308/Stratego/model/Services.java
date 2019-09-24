@@ -11,8 +11,6 @@ import java.util.List;
 public class Services {
 
     @Autowired LoginRepository loginRepository;
-
-
     public boolean validate_login_function(String username, String password){
         if (loginRepository.validate_login(username,password).size() > 0){
             return true;
