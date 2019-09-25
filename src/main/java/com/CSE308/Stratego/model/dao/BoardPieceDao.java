@@ -52,7 +52,7 @@ public class BoardPieceDao {
     public Player getPlayer() { return someplayer; }
 
 
-    public BoardPiece(String piecename, Player pieceplayer){
+    public BoardPieceDao(String piecename, Player pieceplayer){
 
         name = piecename;
         someplayer = pieceplayer;
@@ -127,7 +127,7 @@ public class BoardPieceDao {
             moveMultiple = false;
         }
 
-        System.out.println(name, strength);
+
 
 
 
