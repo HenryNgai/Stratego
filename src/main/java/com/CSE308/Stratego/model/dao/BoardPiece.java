@@ -8,9 +8,13 @@ public class BoardPiece {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String name;
-    private Integer strength;
-    private Integer xPos;
-    private Integer yPos;
+    private int strength;
+    private int xPos;
+    private int yPos;
+    private boolean moveMultiple;
+    private boolean moveable;
+    private Player someplayer;
+
 
 
     public String getName() {
@@ -21,29 +25,124 @@ public class BoardPiece {
         this.name = name;
     }
 
-    public Integer getStrength() {
+    public int getStrength() {
         return strength;
     }
 
-    public void setStrength(Integer strength) {
+    public void setStrength(int strength) {
         this.strength = strength;
     }
 
-    public Integer getxPos() {
+    public int getxPos() {
         return xPos;
     }
 
-    public void setxPos(Integer xPos) {
+    public void setxPos(int xPos) {
         this.xPos = xPos;
     }
 
-    public Integer getyPos() {
+    public int getyPos() {
         return yPos;
     }
 
-    public void setyPos(Integer yPos) {
+    public void setyPos(int yPos) {
         this.yPos = yPos;
     }
+
+    public Player getPlayer() { return someplayer; }
+
+
+    public BoardPiece(String piecename, Player pieceplayer){
+
+        name = piecename;
+        someplayer = pieceplayer;
+
+        if(name.equals("Marshall")){
+            moveable = true;
+            strength = 10;
+            moveMultiple = false;
+        }
+
+        if(name.equals("General")){
+            moveable = true;
+            strength = 9;
+            moveMultiple = false;
+        }
+
+        if(name.equals("Colonel")){
+            moveable = true;
+            strength = 8;
+            moveMultiple = false;
+        }
+
+        if(name.equals("Major")){
+            moveable = true;
+            strength = 7;
+            moveMultiple = false;
+        }
+
+        if(name.equals("Captain")){
+            moveable = true;
+            strength = 6;
+            moveMultiple = false;
+        }
+
+        if(name.equals("Lieutenant")){
+            moveable = true;
+            strength = 5;
+            moveMultiple = false;
+        }
+
+        if(name.equals("Sergeant")){
+            moveable = true;
+            strength = 4;
+            moveMultiple = false;
+        }
+
+        if(name.equals("Miner")){
+            moveable = true;
+            strength = 3;
+            moveMultiple = false;
+        }
+
+        if(name.equals("Scout")){
+            moveable = true;
+            strength = 2;
+            moveMultiple = true;
+        }
+
+        if(name.equals("Spy")){
+            moveable = true;
+            strength = 1;
+            moveMultiple = false;
+        }
+
+        if(name.equals("Bomb")){
+            moveable = false;
+            moveMultiple = false;
+        }
+
+        if(name.equals("Flag")){
+            moveable = false;
+            moveMultiple = false;
+        }
+
+        System.out.println(name, strength);
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
 
 
 
