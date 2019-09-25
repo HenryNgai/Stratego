@@ -103,7 +103,8 @@ public class Game {
     public boolean addPieceFromBank(String name, int posX, int posY){
         for(BoardPiece p: userPieces){
             if(p.getName().equals(name)){
-                if(addPiece(p, posX, posY)) {
+                if(!checkValidMove(p, posX, posY)) return false;
+                if(board.addPiece(p, posX, posY)) {
                     userPieces.remove(p);
                     return true;
                 }
@@ -112,21 +113,21 @@ public class Game {
         return false;
     }
 
-    public boolean addPiece(BoardPiece piece, int posX, int posY){
-        if(posX > river1[0] && posX < river1[2] && posY > river1[1] && posY < river1[3]){
-            return false;
-        }
-        if(posX > river2[0] && posX < river2[2] && posY > river2[1] && posY < river2[3]){
-            return false;
-        }
-        return board.addPiece(piece, posX, posY);
-    }
 
     public boolean movePieceOnBoard(int x, int y, int newX, int newY){
         BoardPiece piece = board.getBoard()[x][y];
+        // Checks if there is a piece at source
         if(piece != null){
-            if(movePiece(piece, newX, newY)) {
+            // checks if there is a piece at destination
+            if(!checkValidMove(piece, newX,newY)) return false;
+            BoardPiece destination = board.getBoard()[newX][newY];
+            if(destination != null){
+                interact(piece, destination);
                 return true;
+            }else {
+                if (movePiece(piece, newX, newY)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -135,13 +136,23 @@ public class Game {
     public boolean movePiece(BoardPiece piece, int newX, int newY){
         int oldX = piece.getxPos();
         int oldY = piece.getyPos();
-        if(addPiece(piece, newX, newY)){
+        if(board.addPiece(piece, newX, newY)){
             board.removePiece(oldX, oldY);
             return true;
         }
         return false;
     }
 
+
+    private boolean checkValidMove(BoardPiece piece, int newX, int newY){
+        //check if the move is valid
+        return true;
+    }
+
+    private void interact(BoardPiece attacker, BoardPiece defender){
+        //do battle/bomb/flag/etc
+
+    }
 
 
     //Getters and setters
