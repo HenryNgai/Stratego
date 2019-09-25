@@ -20,8 +20,8 @@ public class GameBoard {
     public boolean addPiece(BoardPiece piece, int x, int y){
         if(board[x][y] == null){
             board[x][y] = piece;
-            piece.setPosX(x);
-            piece.setPoxY(y);
+            piece.setxPos(x);
+            piece.setyPos(y);
             return true;
         }
         return false;

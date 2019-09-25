@@ -1,5 +1,7 @@
 package com.CSE308.Stratego.model;
 
+import com.CSE308.Stratego.model.dao.Player;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -10,6 +12,9 @@ public class Game {
     // [minx, miny, maxx, maxy]
     private final int river1[] = {2,4,4,6};
     private final int river2[] = {6,4,8,6};
+
+    private Player user;
+    private Player ai;
 
     private ArrayList<BoardPiece> userPieces;
     private ArrayList<BoardPiece> aiPieces;
@@ -26,6 +31,9 @@ public class Game {
 
     public Game(String userName, int gameId){
 
+        user = new Player("Basim", "Red");
+        ai = new Player("Opponent", "Blue");
+
         userPieces = new ArrayList<BoardPiece>();
         aiPieces = new ArrayList<BoardPiece>();
         userGraveyard = new ArrayList<BoardPiece>();
@@ -40,50 +48,50 @@ public class Game {
     }
 
     private void initPieces(){
-        userPieces.add(new BoardPiece("Spy",1));
-        aiPieces.add(new BoardPiece("Spy", 1));
+        userPieces.add(new BoardPiece("Spy", user));
+        aiPieces.add(new BoardPiece("Spy", ai));
         for(int i=0;i<8;i++){
-            userPieces.add(new BoardPiece("Scout",2));
-            aiPieces.add(new BoardPiece("Scout", 2));
+            userPieces.add(new BoardPiece("Scout",user));
+            aiPieces.add(new BoardPiece("Scout", ai));
         }
         for(int i=0; i<5; i++){
-            userPieces.add(new BoardPiece("Miner",3));
-            aiPieces.add(new BoardPiece("Miner", 3));
+            userPieces.add(new BoardPiece("Miner",user));
+            aiPieces.add(new BoardPiece("Miner", ai));
         }
         for(int i=0; i<4; i++){
-            userPieces.add(new BoardPiece("Sergeant",4));
-            aiPieces.add(new BoardPiece("Sergeant", 4));
+            userPieces.add(new BoardPiece("Sergeant",user));
+            aiPieces.add(new BoardPiece("Sergeant", ai));
         }
         for(int i=0; i<4; i++){
-            userPieces.add(new BoardPiece("Lieutenant",5));
-            aiPieces.add(new BoardPiece("Lieutenant", 5));
+            userPieces.add(new BoardPiece("Lieutenant",user));
+            aiPieces.add(new BoardPiece("Lieutenant", ai));
         }
         for(int i=0; i<4; i++){
-            userPieces.add(new BoardPiece("Captain",6));
-            aiPieces.add(new BoardPiece("Captain", 6));
+            userPieces.add(new BoardPiece("Captain",user));
+            aiPieces.add(new BoardPiece("Captain", ai));
         }
         for(int i=0; i<3; i++){
-            userPieces.add(new BoardPiece("Major",7));
-            aiPieces.add(new BoardPiece("Major", 7));
+            userPieces.add(new BoardPiece("Major",user));
+            aiPieces.add(new BoardPiece("Major", ai));
         }
         for(int i=0; i<2; i++){
-            userPieces.add(new BoardPiece("Colonel",8));
-            aiPieces.add(new BoardPiece("Colonel", 8));
+            userPieces.add(new BoardPiece("Colonel",user));
+            aiPieces.add(new BoardPiece("Colonel", ai));
         }
         for(int i=0; i<1; i++){
-            userPieces.add(new BoardPiece("General",9));
-            aiPieces.add(new BoardPiece("General", 9));
+            userPieces.add(new BoardPiece("General",user));
+            aiPieces.add(new BoardPiece("General", ai));
         }
         for(int i=0; i<1; i++){
-            userPieces.add(new BoardPiece("Marshall",10));
-            aiPieces.add(new BoardPiece("Marshall", 10));
+            userPieces.add(new BoardPiece("Marshall",user));
+            aiPieces.add(new BoardPiece("Marshall", ai));
         }
         for(int i=0;i<6;i++){
-            userPieces.add(new BoardPiece("Bomb", 0));
-            aiPieces.add(new BoardPiece("Bomb", 0));
+            userPieces.add(new BoardPiece("Bomb", user));
+            aiPieces.add(new BoardPiece("Bomb", ai));
         }
-        userPieces.add(new BoardPiece("Flag", 0));
-        aiPieces.add(new BoardPiece("Flag", 0));
+        userPieces.add(new BoardPiece("Flag", user));
+        aiPieces.add(new BoardPiece("Flag", ai));
 
 
     }
@@ -125,8 +133,8 @@ public class Game {
     }
 
     public boolean movePiece(BoardPiece piece, int newX, int newY){
-        int oldX = piece.getPosX();
-        int oldY = piece.getPosY();
+        int oldX = piece.getxPos();
+        int oldY = piece.getyPos();
         if(addPiece(piece, newX, newY)){
             board.removePiece(oldX, oldY);
             return true;
@@ -207,5 +215,21 @@ public class Game {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Player getUser() {
+        return user;
+    }
+
+    public void setUser(Player user) {
+        this.user = user;
+    }
+
+    public Player getAi() {
+        return ai;
+    }
+
+    public void setAi(Player ai) {
+        this.ai = ai;
     }
 }
