@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 
 @Entity
-public class BoardPiece {
+public class BoardPieceDao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String name;
