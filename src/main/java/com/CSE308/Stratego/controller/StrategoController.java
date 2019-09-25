@@ -32,11 +32,11 @@ public class StrategoController {
         return "game";
     }
 
-    @GetMapping("success")
-    public String homePage(Model model) {
-        model.addAttribute("results", services.getAllGameResults());
-        return "home";
-    }
+//    @GetMapping("success")
+//    public String homePage(Model model) {
+//        model.addAttribute("results", services.getAllGameResults());
+//        return "home";
+//    }
 
     @PostMapping("/validate_login")
     public String validate_login(@RequestParam String username, @RequestParam String password){
