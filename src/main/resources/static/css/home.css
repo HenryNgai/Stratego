@@ -1,0 +1,19 @@
+html,
+body {
+    height: 100%;
+    background:url("../images/exploredribbblet.gif") no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+.shadow-out	{
+    box-shadow: -1px 0px 36px -4px rgba(0,0,0,0.75);
+}
+
