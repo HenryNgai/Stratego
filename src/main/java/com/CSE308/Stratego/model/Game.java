@@ -195,7 +195,10 @@ public class Game {
             return false;
         }
         //check for piece
-        if(board.getBoard()[newX][newY] != null) return false;
+        BoardPiece piece = board.getBoard()[newX][newY];
+        if(piece != null){
+            if(!piece.getPlayer().getName().equals("Opponent")) return false;
+        }
         return true;
     }
 
