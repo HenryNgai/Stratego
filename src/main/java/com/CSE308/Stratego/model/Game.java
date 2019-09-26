@@ -9,9 +9,11 @@ import java.util.Vector;
 
 public class Game {
 
+    //boundaries for rivers and player zone
     // [minx, miny, maxx, maxy]
-    private final int river1[] = {2,4,4,6};
-    private final int river2[] = {6,4,8,6};
+    private final int RIVER1[] = {2,4,4,6};
+    private final int RIVER2[] = {6,4,8,6};
+    private final int PLAYER_ZONE_LIMIT = 3;
 
     private Player user;
     private Player ai;
@@ -146,8 +148,56 @@ public class Game {
     }
 
 
+    //check if the move is valid
     private boolean checkValidMove(BoardPiece piece, int newX, int newY){
-        //check if the move is valid
+
+        //if we are adding from bank
+        if(userPieces.contains(piece)){
+            //check player side boundary
+            if(newY > PLAYER_ZONE_LIMIT) return false;
+            if(board.getBoard()[newX][newY] != null) return false;
+            return true;
+        }
+        //if we are moving a piece on the board
+        //if a flag or bomb
+        if(!piece.isMoveable()) return false;
+
+        int currX = piece.getxPos();
+        int currY = piece.getyPos();
+        if(piece.isMoveMultiple()){
+            //scout
+            if(newX != currX && newY != currY ) return false;
+            if(newX == currX && newY == currY ) return false;
+            if(newX != currX){
+                for(int i=currX+1; i<=newX; i++){
+                    if(!isSpaceAvailable(i, currY)) return false;
+                }
+                return true;
+            }else{
+                for(int i=currY+1; i<=newY; i++){
+                    if(!isSpaceAvailable(currX, i)) return false;
+                }
+                return true;
+            }
+        }
+        //checks if moving one step forward/backward/side-to-side
+        double dist = Math.sqrt((((double)newX-(double)currX)*((double)newX-(double)currX))+(((double)newY-(double)currY)*((double)newY-(double)currY)));
+        if(dist != 1.0)return false;
+        //checks if space is available
+        return isSpaceAvailable(newX, newY);
+
+    }
+
+    private boolean isSpaceAvailable(int newX, int newY){
+        //check for rivers
+        if(newX > RIVER1[0] && newX < RIVER1[2] && newY > RIVER1[1] && newY < RIVER1[3]){
+            return false;
+        }
+        if(newX > RIVER2[0] && newX < RIVER2[2] && newY > RIVER2[1] && newY < RIVER1[3]){
+            return false;
+        }
+        //check for piece
+        if(board.getBoard()[newX][newY] != null) return false;
         return true;
     }
 

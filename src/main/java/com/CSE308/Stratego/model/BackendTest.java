@@ -1,9 +1,6 @@
 package com.CSE308.Stratego.model;
 
-import com.CSE308.Stratego.model.dao.BoardPieceDao;
 
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,7 +19,9 @@ public class BackendTest {
             if(input.equals("Bomb")){
                 int x = scn.nextInt();
                 int y = scn.nextInt();
-                game.addPieceFromBank("Bomb", x, y);
+                if(!game.addPieceFromBank("Bomb", x, y)){
+                    System.out.println("Invalid placement");
+                }
                 printBoard();
             }else if(input.equals("q")){
                 done = true;
@@ -31,7 +30,9 @@ public class BackendTest {
                 int y = scn.nextInt();
                 int newX = scn.nextInt();
                 int newY = scn.nextInt();
-                game.movePieceOnBoard(x,y,newX,newY);
+                if(!game.movePieceOnBoard(x,y,newX,newY)){
+                    System.out.println("Invalid move");
+                }
                 printBoard();
             }
 

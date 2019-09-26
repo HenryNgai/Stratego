@@ -49,11 +49,28 @@ public class BoardPiece {
 
     public Player getPlayer() { return someplayer; }
 
+    public boolean isMoveMultiple() {
+        return moveMultiple;
+    }
+
+    public void setMoveMultiple(boolean moveMultiple) {
+        this.moveMultiple = moveMultiple;
+    }
+
+    public boolean isMoveable() {
+        return moveable;
+    }
+
+    public void setMoveable(boolean moveable) {
+        this.moveable = moveable;
+    }
 
     public BoardPiece(String piecename, Player pieceplayer){
 
         name = piecename;
         someplayer = pieceplayer;
+        xPos = -1;
+        yPos = -1;
 
         if(name.equals("Marshall")){
             moveable = true;
