@@ -31,6 +31,9 @@ public class Game {
 
     private String userName;
 
+    private boolean setUpPhase;
+    private boolean battlePhase;
+
     public Game(String userName, int gameId){
 
         user = new Player("Basim", "Red");
@@ -117,7 +120,7 @@ public class Game {
 
 
     public boolean movePieceOnBoard(int x, int y, int newX, int newY){
-        BoardPiece piece = board.getBoard()[x][y];
+        BoardPiece piece = getPieceFromBoard(x,y);
         // Checks if there is a piece at source
         if(piece != null){
             // checks if there is a piece at destination
@@ -195,7 +198,7 @@ public class Game {
             return false;
         }
         //check for piece
-        BoardPiece piece = board.getBoard()[newX][newY];
+        BoardPiece piece = getPieceFromBoard(newX, newY);
         if(piece != null){
             if(!piece.getPlayer().getName().equals("Opponent")) return false;
         }
@@ -209,6 +212,24 @@ public class Game {
 
 
     //Getters and setters
+
+
+    public boolean isSetUpPhase() {
+        return setUpPhase;
+    }
+
+    public void setSetUpPhase(boolean setUpPhase) {
+        this.setUpPhase = setUpPhase;
+    }
+
+    public boolean isBattlePhase() {
+        return battlePhase;
+    }
+
+    public void setBattlePhase(boolean battlePhase) {
+        this.battlePhase = battlePhase;
+    }
+
     public ArrayList<BoardPiece> getUserPieces() {
         return userPieces;
     }
