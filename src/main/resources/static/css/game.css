@@ -1,0 +1,56 @@
+html,
+body,.container-fluid {
+    height: 100%;
+}
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+.wrapper {
+      background:url("../images/map.png") no-repeat;
+      background-size: cover;
+      background-position: 50% 50%;
+      display: grid;
+      grid-gap: 0;
+      grid-template-columns: repeat(10, auto);
+      grid-auto-flow: row;
+      padding: 42px;
+      width: 50vh;
+      height: 50vh;
+}
+
+.wrapper div{
+    position: relative;
+}
+
+img {
+    user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+#pieces {
+          display: grid;
+          grid-gap: 0;
+          grid-template-columns: repeat(2, auto);
+          grid-auto-flow: row;
+}
+
+#pieces div {
+  width: 100px;
+  height: 100px;
+}
+
+.draggable{
+}
+
+.droppable{
+
+}
