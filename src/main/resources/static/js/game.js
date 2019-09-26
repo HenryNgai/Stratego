@@ -24,7 +24,17 @@ $(document).ready(function($) {
                     using: function (css, calc) {
                         $(this).animate(css, 0, 'linear');
                     }
+
                 });
+
+                
+
+
+
+
+
+
+
             }});
 
 });

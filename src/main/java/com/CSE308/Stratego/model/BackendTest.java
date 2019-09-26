@@ -1,9 +1,6 @@
 package com.CSE308.Stratego.model;
 
-import com.CSE308.Stratego.model.dao.BoardPieceDao;
 
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
