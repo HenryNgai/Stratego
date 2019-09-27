@@ -84,11 +84,62 @@ function init(){
     $('.wrapper').html( '' );
     $('#pieces').html( '' );
 
-    var count = 1;
-    for (var i=0; i<40; i++ ) {
-        $('#pieces').append('<div class="draggable" id = Bomb'+count+'></div>');
-        $('#Bomb'+count).prepend($('<img>',{class:"img-fluid",src:'../images/B_Bomb.png'}));
-        count++;
+    for (var i=0; i<6; i++ ) {
+        $('#pieces').append('<div class="draggable" id = Bomb'+(i+1)+'></div>');
+        $('#Bomb'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_Bomb.png'}));
+    }
+
+    for (var i=0; i<1; i++ ) {
+        $('#pieces').append('<div class="draggable" id = Flag'+(i+1)+'></div>');
+        $('#Flag'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_Flag.png'}));
+    }
+
+    for (var i=0; i<1; i++ ) {
+        $('#pieces').append('<div class="draggable" id = Marshall'+(i+1)+'></div>');
+        $('#Marshall'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_Marshall.png'}));
+    }
+
+    for (var i=0; i<1; i++ ) {
+        $('#pieces').append('<div class="draggable" id = General'+(i+1)+'></div>');
+        $('#General'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_General.png'}));
+    }
+
+    for (var i=0; i<2; i++ ) {
+        $('#pieces').append('<div class="draggable" id = Colonel'+(i+1)+'></div>');
+        $('#Colonel'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_Colonel.png'}));
+    }
+
+    for (var i=0; i<3; i++ ) {
+        $('#pieces').append('<div class="draggable" id = Major'+(i+1)+'></div>');
+        $('#Major'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_Major.png'}));
+    }
+
+    for (var i=0; i<4; i++ ) {
+        $('#pieces').append('<div class="draggable" id = Captain'+(i+1)+'></div>');
+        $('#Captain'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_Captain.png'}));
+    }
+    for (var i=0; i<4; i++ ) {
+        $('#pieces').append('<div class="draggable" id = Lieutenant'+(i+1)+'></div>');
+        $('#Lieutenant'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_Lieutenant.png'}));
+    }
+    for (var i=0; i<4; i++ ) {
+        $('#pieces').append('<div class="draggable" id = Sergeant'+(i+1)+'></div>');
+        $('#Sergeant'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_Sergeant.png'}));
+    }
+
+    for (var i=0; i<5; i++ ) {
+        $('#pieces').append('<div class="draggable" id = Miner'+(i+1)+'></div>');
+        $('#Miner'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_Miner.png'}));
+    }
+
+    for (var i=0; i<8; i++ ) {
+        $('#pieces').append('<div class="draggable" id = Scout'+(i+1)+'></div>');
+        $('#Scout'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_Scout.png'}));
+    }
+
+    for (var i=0; i<1; i++ ) {
+        $('#pieces').append('<div class="draggable" id = Spy'+(i+1)+'></div>');
+        $('#Spy'+(i+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_Spy.png'}));
     }
 
       // Create the card slots
