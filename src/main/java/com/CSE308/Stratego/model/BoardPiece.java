@@ -12,6 +12,7 @@ public class BoardPiece {
     private boolean moveMultiple;
     private boolean moveable;
     private Player someplayer;
+    private boolean visible;
 
 
 
@@ -65,12 +66,25 @@ public class BoardPiece {
         this.moveable = moveable;
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
     public BoardPiece(String piecename, Player pieceplayer){
 
         name = piecename;
         someplayer = pieceplayer;
         xPos = -1;
         yPos = -1;
+        visible = true;
+
+        if(someplayer.getName().equals("Opponent")){
+            visible = false;
+        }
 
         if(name.equals("Marshall")){
             moveable = true;

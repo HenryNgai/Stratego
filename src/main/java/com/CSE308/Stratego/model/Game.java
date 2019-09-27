@@ -119,12 +119,16 @@ public class Game {
 
     public boolean makeMove(String name, int x, int y, int newX, int newY, boolean isAi){
         if(setUpPhase){
-            if(addPieceFromBank(name, newX, newY, isAi)){
-                if (userPieces.isEmpty() && aiPieces.isEmpty()) {
-                    setUpPhase = false;
-                    battlePhase = true;
+            if(x == -1) {
+                if (addPieceFromBank(name, newX, newY, isAi)) {
+                    if (userPieces.isEmpty() && aiPieces.isEmpty()) {
+                        setUpPhase = false;
+                        battlePhase = true;
+                    }
+                    return true;
                 }
-                return true;
+            }else{
+                return movePieceOnBoard(x, y, newX, newY);
             }
             return false;
         }if(battlePhase){
@@ -174,7 +178,7 @@ public class Game {
         if(piece != null){
             // checks if there is a piece at destination
             if(!checkValidMove(piece, newX,newY)) return false;
-            BoardPiece destination = board.getBoard()[newX][newY];
+            BoardPiece destination = getPieceFromBoard(newX, newY);
             if(destination != null){
                 interact(piece, destination);
                 //to be added, check here if gamewon is true assuming we reached flag
@@ -268,6 +272,9 @@ public class Game {
         String defend_col = defender.getPlayer().getColor();
 
 
+        attacker.setVisible(true);
+        defender.setVisible(true);
+
         //check if piece is a flag or a bomb and dont let it be interacted with
         if(selectedpiece.equals("Flag") || selectedpiece.equals("Bomb")){
             System.out.println("Invalid, these pieces cannot be moved");
@@ -277,13 +284,14 @@ public class Game {
         //if a miner attacks a bomb, destroy the bomb
         if(selectedpiece.equals("Miner") && destinationpiece.equals("Bomb")){
             board.removePiece(defender.getxPos(), defender.getyPos());
+            movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
-            if(defend_col.equals("Red")){
+            if(defend_col.equals("Blue")){
                 userGraveyard.add(defender);
             }
-            else if(defend_col.equals("Blue")){
+            else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
             }
         }
@@ -293,11 +301,11 @@ public class Game {
             attacker.setxPos(-1);
             attacker.setyPos(-1);
             //send to appropriate graveyard
-            if(attack_col.equals("Red")){
+            if(attack_col.equals("Blue")){
                 userGraveyard.add(attacker);
                 user_charsLost++;
             }
-            else if(attack_col.equals("Blue")){
+            else if(attack_col.equals("Red")){
                 aiGraveyard.add(attacker);
                 ai_charsLost++;
             }
@@ -311,14 +319,15 @@ public class Game {
         //if spy attacks marshall
         if(selectedpiece.equals("Spy") && destinationpiece.equals("Marshall")){
             board.removePiece(defender.getxPos(), defender.getyPos());
+            movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
-            if(defend_col.equals("Red")){
+            if(defend_col.equals("Blue")){
                 userGraveyard.add(defender);
                 user_charsLost++;
             }
-            else if(defend_col.equals("Blue")){
+            else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
@@ -327,14 +336,15 @@ public class Game {
         //if marshall attacks spy
         if(selectedpiece.equals("Marshall") && destinationpiece.equals("Spy")){
             board.removePiece(defender.getxPos(), defender.getyPos());
+            movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
-            if(defend_col.equals("Red")){
+            if(defend_col.equals("Blue")){
                 userGraveyard.add(defender);
                 user_charsLost++;
             }
-            else if(defend_col.equals("Blue")){
+            else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
@@ -344,14 +354,15 @@ public class Game {
         //otherwise see if our attacker is stronger than defender
         else if(selectedstr > destinationstr){
             board.removePiece(defender.getxPos(), defender.getyPos());
+            movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
-            if(defend_col.equals("Red")){
+            if(defend_col.equals("Blue")){
                 userGraveyard.add(defender);
                 user_charsLost++;
             }
-            else if(defend_col.equals("Blue")){
+            else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
@@ -363,11 +374,11 @@ public class Game {
             attacker.setxPos(-1);
             attacker.setyPos(-1);
             //send to appropriate graveyard
-            if(attack_col.equals("Red")){
+            if(attack_col.equals("Blue")){
                 userGraveyard.add(attacker);
                 user_charsLost++;
             }
-            else if(attack_col.equals("Blue")){
+            else if(attack_col.equals("Red")){
                 aiGraveyard.add(attacker);
                 ai_charsLost++;
             }
@@ -382,20 +393,20 @@ public class Game {
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyards
-            if(attack_col.equals("Red")){
+            if(attack_col.equals("Blue")){
                 userGraveyard.add(attacker);
                 user_charsLost++;
             }
-            else if(attack_col.equals("Blue")){
+            else if(attack_col.equals("Red")){
                 aiGraveyard.add(attacker);
                 ai_charsLost++;
             }
 
-            if(defend_col.equals("Red")){
+            if(defend_col.equals("Blue")){
                 userGraveyard.add(defender);
                 user_charsLost++;
             }
-            else if(defend_col.equals("Blue")){
+            else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }

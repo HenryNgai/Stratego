@@ -40,13 +40,15 @@ public class BackendTest {
                 int x = scn.nextInt();
                 System.out.print("Y: ");
                 int y = scn.nextInt();
-                if(!game.makeMove(input,0,0, x, y, false)){
+                if(!game.makeMove(input,-1,-1, x, y, false)){
                     System.out.println("Invalid placement");
                 }
                 printBoard();
+            }else if(input.equals("auto")){
+                autoSetup();
             }
 
-            if(game.getUserPieces().isEmpty()){
+            if(game.isSetUpPhase() && game.getUserPieces().isEmpty()){
                 aiSetup();
             }
 
@@ -54,17 +56,28 @@ public class BackendTest {
         }
     }
 
+    private static void autoSetup(){
+        ArrayList<BoardPiece> pieces = game.getUserPieces();
+        Collections.shuffle(pieces);
+        int loop = pieces.size();
+        int offset = 60;
+        for(int i=0+offset;i<loop+offset;i++){
+            int x = i/10;
+            int y= i%10;
+            game.makeMove(pieces.get(0).getName(),-1,-1,x,y,false);
+        }
+        printBoard();
+
+    }
+
     private static void aiSetup(){
         ArrayList<BoardPiece> aiPieces = game.getAiPieces();
         Collections.shuffle(aiPieces);
         int loop = aiPieces.size();
         for(int i=0;i<loop;i++){
-            if(i==20){
-                System.out.println("");
-            }
             int x = i/10;
             int y= i%10;
-            game.makeMove(aiPieces.get(0).getName(),0,0,x,y,true);
+            game.makeMove(aiPieces.get(0).getName(),-1,-1,x,y,true);
         }
         printBoard();
 
@@ -76,6 +89,12 @@ public class BackendTest {
 
 
     private static void printBoard(){
+        if(game.isSetUpPhase()){
+            System.out.println("Setup Phase \n");
+        }else{
+            System.out.println("Battle Phase\n");
+        }
+
         System.out.println("  0123456789");
         for(int i=0;i<10;i++){
             System.out.print(i +"|");
@@ -83,7 +102,10 @@ public class BackendTest {
                 BoardPiece piece = game.getPieceFromBoard(i, j);
                 if(piece == null){
                     System.out.print(0);
-                }else if(piece.getName().equals("Bomb")){
+                }else if(!piece.isVisible()){
+                    System.out.print("X");
+                }
+                else if(piece.getName().equals("Bomb")){
                     System.out.print("B");
                 }else if(piece.getName().equals("Flag")){
                     System.out.print("F");
