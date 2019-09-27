@@ -1,8 +1,6 @@
 package com.CSE308.Stratego.model;
 
 
-import com.CSE308.Stratego.model.dao.Player;
-
 public class BoardPiece {
 
     private String name;

@@ -1,11 +1,7 @@
 package com.CSE308.Stratego.model;
 
-import com.CSE308.Stratego.model.dao.Player;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Vector;
 
 public class Game {
 

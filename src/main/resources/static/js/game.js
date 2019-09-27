@@ -4,48 +4,78 @@ $(document).ready(function($) {
         refresh();
     });
     init();
-    var dropt = false;
-            $('.draggable').draggable({
-                 appendTo: "body",
-                 revert: "invalid" ,
-                 helper: function () {
-                     $copy = $(this).clone();
-                     $copy.css({"list-style":"none","width":$(this).outerWidth()});
-                     return $copy;
-                 },
-                 scroll: false
+        $('.draggable').draggable({
+            appendTo: "body",
+            revert: function() {
+                if ($(this).hasClass('drag-revert')) {
+                  $(this).removeClass('drag-revert');
+                  return true;
+                }
+              },
+             helper: function () {
+                 $copy = $(this).clone();
+                 $copy.css({"list-style":"none","width":$(this).outerWidth()});
+                 return $copy;
+             },
+             scroll: false
+        });
+        $('.droppable').droppable({
+           hoverClass: 'active',
+           cursor: "default",
+           tolerance: "pointer",
+           drop: function(ev, ui) {
+            var dropped = ui.draggable;
+            var droppedOn = $(this);
+            var w=$(droppedOn).width();
+            var h=$(droppedOn).height();
+            var bank = false;
+            var prevX = "-1";
+            var prevY = "-1";
+
+            if ($(dropped).parent().attr('id') == "pieces"){
+                bank = true;
+            }
+            else{
+               var temp =  parseInt($(dropped).parent().attr("id").substring(3));
+               prevX = Math.floor(temp/10);
+               prevY = Math.floor(temp%10);
+            }
+
+            $(dropped).draggable({ containment: '.wrapper',cursor: 'move'});
+            $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
+            ui.draggable.position({
+                of: $(this),
+                my: 'left top',
+                at: 'left top',
+                using: function (css, calc) {
+                    $(this).animate(css, 0, 'linear');
+                }
+
             });
-            $('.droppable').droppable({
-               hoverClass: 'active',
-               cursor: "default",
-               tolerance: "pointer",
-               drop: function(ev, ui) {
-                var dropped = ui.draggable;
-                var droppedOn = $(this);
-                var w=$(droppedOn).width();
-                var h=$(droppedOn).height();
 
-                $(dropped).draggable({ containment: '.wrapper',cursor: 'move'});
-                $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
-                ui.draggable.position({
-                    of: $(this),
-                    my: 'left top',
-                    at: 'left top',
-                    using: function (css, calc) {
-                        $(this).animate(css, 0, 'linear');
+        var boxNumber = parseInt(this.id.substring(3));
+        var coordx = Math.floor(boxNumber/10);
+        var coordy = Math.floor(boxNumber%10);
+        var isAI = "False";
+        var pieceName = $(dropped).attr('id')
+        pieceName = pieceName.replace(/[0-9]/g, '');
+           $.post("validate-move",
+                {
+                    piece: pieceName,
+                    previousX: prevX,
+                    previousY: prevY,
+                    newX: coordx,
+                    newY: coordy,
+                    AI: isAI
+                },
+                function(data){
+                    if (data == "False") {
+                      return $(ui.draggable).addClass('drag-revert');
                     }
+                }
+                );
 
-                });
-
-
-
-
-
-
-
-
-
-            }});
+        }});
 
 });
 
