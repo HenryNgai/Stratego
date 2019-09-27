@@ -278,11 +278,13 @@ public class Game {
         //check if piece is a flag or a bomb and dont let it be interacted with
         if(selectedpiece.equals("Flag") || selectedpiece.equals("Bomb")){
             System.out.println("Invalid, these pieces cannot be moved");
+            return;
         }
 
         //check special cases for bomb
         //if a miner attacks a bomb, destroy the bomb
         if(selectedpiece.equals("Miner") && destinationpiece.equals("Bomb")){
+            defender.setKilledBy(attacker);
             board.removePiece(defender.getxPos(), defender.getyPos());
             movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
@@ -297,6 +299,7 @@ public class Game {
         }
         //if a non miner piece attacks bomb, destroy the piece
         if(!selectedpiece.equals("Miner") && destinationpiece.equals("Bomb")){
+            attacker.setKilledBy(defender);
             board.removePiece(attacker.getxPos(), attacker.getyPos());
             attacker.setxPos(-1);
             attacker.setyPos(-1);
@@ -313,11 +316,13 @@ public class Game {
 
         //if we touch the flag, game is won
         if(destinationpiece.equals("Flag")){
+            defender.setKilledBy(attacker);
             gamewon = true;
         }
 
         //if spy attacks marshall
         if(selectedpiece.equals("Spy") && destinationpiece.equals("Marshall")){
+            defender.setKilledBy(attacker);
             board.removePiece(defender.getxPos(), defender.getyPos());
             movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
@@ -335,6 +340,7 @@ public class Game {
 
         //if marshall attacks spy
         if(selectedpiece.equals("Marshall") && destinationpiece.equals("Spy")){
+            defender.setKilledBy(attacker);
             board.removePiece(defender.getxPos(), defender.getyPos());
             movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
@@ -353,6 +359,7 @@ public class Game {
 
         //otherwise see if our attacker is stronger than defender
         else if(selectedstr > destinationstr){
+            defender.setKilledBy(attacker);
             board.removePiece(defender.getxPos(), defender.getyPos());
             movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
@@ -370,6 +377,7 @@ public class Game {
         }
         //if defender is stronger than attacker
         else if(selectedstr < destinationstr){
+            attacker.setKilledBy(defender);
             board.removePiece(attacker.getxPos(), attacker.getyPos());
             attacker.setxPos(-1);
             attacker.setyPos(-1);
@@ -386,6 +394,8 @@ public class Game {
 
         //if they are of equal strength destroy both
         else if(selectedstr == destinationstr){
+            defender.setKilledBy(attacker);
+            attacker.setKilledBy(defender);
             board.removePiece(attacker.getxPos(), attacker.getyPos());
             board.removePiece(defender.getxPos(), defender.getyPos());
             attacker.setxPos(-1);
