@@ -4,38 +4,78 @@ $(document).ready(function($) {
         refresh();
     });
     init();
+        $('.draggable').draggable({
+            appendTo: "body",
+            revert: function() {
+                if ($(this).hasClass('drag-revert')) {
+                  $(this).removeClass('drag-revert');
+                  return true;
+                }
+              },
+             helper: function () {
+                 $copy = $(this).clone();
+                 $copy.css({"list-style":"none","width":$(this).outerWidth()});
+                 return $copy;
+             },
+             scroll: false
+        });
+        $('.droppable').droppable({
+           hoverClass: 'active',
+           cursor: "default",
+           tolerance: "pointer",
+           drop: function(ev, ui) {
+            var dropped = ui.draggable;
+            var droppedOn = $(this);
+            var w=$(droppedOn).width();
+            var h=$(droppedOn).height();
+            var bank = false;
+            var prevX = "-1";
+            var prevY = "-1";
 
-            $('.draggable').draggable({ revert: true, cursor: 'move'});
-            $('.droppable').droppable({
-               hoverClass: 'active',
-               cursor: "default",
-               drop: function(ev, ui) {
-                var dropped = ui.draggable;
-                var droppedOn = $(this);
-                var w=$(droppedOn).width();
-                var h=$(droppedOn).height();
+            if ($(dropped).parent().attr('id') == "pieces"){
+                bank = true;
+            }
+            else{
+               var temp =  parseInt($(dropped).parent().attr("id").substring(3));
+               prevX = Math.floor(temp/10);
+               prevY = Math.floor(temp%10);
+            }
 
-                $(dropped).draggable({ containment: '.wrapper',cursor: 'move'});
-                $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
-                ui.draggable.position({
-                    of: $(this),
-                    my: 'left top',
-                    at: 'left top',
-                    using: function (css, calc) {
-                        $(this).animate(css, 0, 'linear');
+            $(dropped).draggable({ containment: '.wrapper',cursor: 'move'});
+            $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
+            ui.draggable.position({
+                of: $(this),
+                my: 'left top',
+                at: 'left top',
+                using: function (css, calc) {
+                    $(this).animate(css, 0, 'linear');
+                }
+
+            });
+
+        var boxNumber = parseInt(this.id.substring(3));
+        var coordx = Math.floor(boxNumber/10);
+        var coordy = Math.floor(boxNumber%10);
+        var isAI = "False";
+        var pieceName = $(dropped).attr('id')
+        pieceName = pieceName.replace(/[0-9]/g, '');
+           $.post("validate-move",
+                {
+                    piece: pieceName,
+                    previousX: prevX,
+                    previousY: prevY,
+                    newX: coordx,
+                    newY: coordy,
+                    AI: isAI
+                },
+                function(data){
+                    if (data == "False") {
+                      return $(ui.draggable).addClass('drag-revert');
                     }
+                }
+                );
 
-                });
-
-                
-
-
-
-
-
-
-
-            }});
+        }});
 
 });
 
@@ -45,30 +85,48 @@ function init(){
     $('#pieces').html( '' );
 
     var count = 1;
-    for (var i=0; i<6; i++ ) {
+    for (var i=0; i<40; i++ ) {
         $('#pieces').append('<div class="draggable" id = Bomb'+count+'></div>');
-        $('#Bomb'+count).prepend($('<img>',{class:"img-fluid",src:'../images/Bomb.png'}));
+        $('#Bomb'+count).prepend($('<img>',{class:"img-fluid",src:'../images/B_Bomb.png'}));
         count++;
     }
 
       // Create the card slots
-    for ( var i=1; i<=100; i++ ) {
-        $('.wrapper').append('<div class="droppable" id = Box'+i+'></div>');
-     }
+    for ( var i=0; i<=99; i++ ) {
+        if ( i == 42 || i == 43 || i == 46 || i == 47 || i == 52 || i == 53 || i == 56 || i == 57){
+            $('.wrapper').append('<div id = Box'+i+'></div>');
+        }
+        else{
+            $('.wrapper').append('<div class="droppable" id = Box'+i+'></div>');
+        }
+    }
 }
 
 
 function refresh() {
+    var height = $(window).height() - ($(".logo").outerHeight() + $(".Lost").outerHeight());
+    $("#pieces").height(height);
         var x=$(window).width();
         var y=$(window).height();
-        if(x < 1300 && x>730){
+        if(x>400){
             var a=x/1.5;
-            var pad = a*9.5/100;
-            $(".wrapper").css('width', a);
-            $(".wrapper").css('height', a);
-            $(".wrapper").css('padding', pad);
-            var w=$(".droppable").width();
-            var h=$(".droppable").height();
-            $(".droppable .draggable").css('width', w, 'height', h);
+            if(a<=950){
+                var pad = a*9.5/100;
+                $(".wrapper").css('width', a);
+                $(".wrapper").css('height', a);
+                $(".wrapper").css('padding', pad);
+                var w=$(".droppable").width();
+                var h=$(".droppable").height();
+                $(".droppable .draggable").css('width', w, 'height', h);
+            }
+            else{
+                var pad = 950*9.5/100;
+                $(".wrapper").css('width', 950);
+                $(".wrapper").css('height', 950);
+                $(".wrapper").css('padding', pad);
+                var w=$(".droppable").width();
+                var h=$(".droppable").height();
+                $(".droppable .draggable").css('width', w, 'height', h);
+            }
         }
 }
