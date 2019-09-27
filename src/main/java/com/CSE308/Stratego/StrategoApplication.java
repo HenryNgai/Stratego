@@ -14,9 +14,14 @@ import java.util.Arrays;
 public class StrategoApplication {
 
 	public static void main(String[] args) {
+		disableWarning();
 	    SpringApplication.run(StrategoApplication.class, args);
-	}
 
+	}
+	public static void disableWarning() {
+		System.err.close();
+		System.setErr(System.out);
+	}
 }
 
 
