@@ -36,8 +36,8 @@ public class Game {
 
     public Game(String userName, int gameId){
 
-        user = new Player("Basim", "Red");
-        ai = new Player("Opponent", "Blue");
+        user = new Player("Basim", "Blue");
+        ai = new Player("Opponent", "Red");
 
         userPieces = new ArrayList<BoardPiece>();
         aiPieces = new ArrayList<BoardPiece>();
@@ -232,10 +232,10 @@ public class Game {
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
-            if(defend_col.equals("Red")){
+            if(defend_col.equals("Blue")){
                 userGraveyard.add(defender);
             }
-            else if(defend_col.equals("Blue")){
+            else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
             }
         }
@@ -245,11 +245,11 @@ public class Game {
             attacker.setxPos(-1);
             attacker.setyPos(-1);
             //send to appropriate graveyard
-            if(attack_col.equals("Red")){
+            if(attack_col.equals("Blue")){
                 userGraveyard.add(attacker);
                 user_charsLost++;
             }
-            else if(attack_col.equals("Blue")){
+            else if(attack_col.equals("Red")){
                 aiGraveyard.add(attacker);
                 ai_charsLost++;
             }
@@ -266,11 +266,11 @@ public class Game {
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
-            if(defend_col.equals("Red")){
+            if(defend_col.equals("Blue")){
                 userGraveyard.add(defender);
                 user_charsLost++;
             }
-            else if(defend_col.equals("Blue")){
+            else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
@@ -282,11 +282,11 @@ public class Game {
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
-            if(defend_col.equals("Red")){
+            if(defend_col.equals("Blue")){
                 userGraveyard.add(defender);
                 user_charsLost++;
             }
-            else if(defend_col.equals("Blue")){
+            else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
@@ -299,11 +299,11 @@ public class Game {
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
-            if(defend_col.equals("Red")){
+            if(defend_col.equals("Blue")){
                 userGraveyard.add(defender);
                 user_charsLost++;
             }
-            else if(defend_col.equals("Blue")){
+            else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
@@ -315,11 +315,11 @@ public class Game {
             attacker.setxPos(-1);
             attacker.setyPos(-1);
             //send to appropriate graveyard
-            if(attack_col.equals("Red")){
+            if(attack_col.equals("Blue")){
                 userGraveyard.add(attacker);
                 user_charsLost++;
             }
-            else if(attack_col.equals("Blue")){
+            else if(attack_col.equals("Red")){
                 aiGraveyard.add(attacker);
                 ai_charsLost++;
             }
@@ -334,20 +334,20 @@ public class Game {
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyards
-            if(attack_col.equals("Red")){
+            if(attack_col.equals("Blue")){
                 userGraveyard.add(attacker);
                 user_charsLost++;
             }
-            else if(attack_col.equals("Blue")){
+            else if(attack_col.equals("Red")){
                 aiGraveyard.add(attacker);
                 ai_charsLost++;
             }
 
-            if(defend_col.equals("Red")){
+            if(defend_col.equals("Blue")){
                 userGraveyard.add(defender);
                 user_charsLost++;
             }
-            else if(defend_col.equals("Blue")){
+            else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
