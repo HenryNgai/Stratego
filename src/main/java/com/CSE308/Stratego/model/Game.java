@@ -13,7 +13,7 @@ public class Game {
     // [minx, miny, maxx, maxy]
     private final int RIVER1[] = {2,4,4,6};
     private final int RIVER2[] = {6,4,8,6};
-    private final int PLAYER_ZONE_LIMIT = 3;
+    private final int PLAYER_ZONE_LIMIT = 6;
 
     private Player user;
     private Player ai;
@@ -37,8 +37,8 @@ public class Game {
 
     public Game(String userName, int gameId){
 
-        user = new Player("Basim", "Red");
-        ai = new Player("Opponent", "Blue");
+        user = new Player(userName, "Blue");
+        ai = new Player("Opponent", "Red");
 
         userPieces = new ArrayList<BoardPiece>();
         aiPieces = new ArrayList<BoardPiece>();
@@ -49,6 +49,10 @@ public class Game {
         startTime = new Date();
         this.gameId = gameId;
         this.userName = userName;
+
+        setUpPhase = true;
+        battlePhase = false;
+        gamewon = false;
 
         initPieces();
     }
@@ -106,7 +110,45 @@ public class Game {
         return board.getBoard()[i][j];
     }
 
-    public boolean addPieceFromBank(String name, int posX, int posY){
+
+    public boolean makeMove(String name, int x, int y, int newX, int newY, boolean isAi){
+        if(setUpPhase){
+            if(addPieceFromBank(name, newX, newY, isAi)){
+                if (userPieces.isEmpty() && aiPieces.isEmpty()) {
+                    setUpPhase = false;
+                    battlePhase = true;
+                }
+                return true;
+            }
+            return false;
+        }if(battlePhase){
+            if(movePieceOnBoard(x,y,newX,newY)){
+                aiMovePiece();
+                //method to check if game over
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    private void aiMovePiece(){
+        //ai moves here
+    }
+
+
+    public boolean addPieceFromBank(String name, int posX, int posY, boolean isAi){
+        if(isAi){
+            for(BoardPiece p: aiPieces){
+                if(p.getName().equals(name)){
+                    if(board.addPiece(p, posX, posY)) {
+                        aiPieces.remove(p);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         for(BoardPiece p: userPieces){
             if(p.getName().equals(name)){
                 if(!checkValidMove(p, posX, posY)) return false;
@@ -155,9 +197,9 @@ public class Game {
     private boolean checkValidMove(BoardPiece piece, int newX, int newY){
 
         //if we are adding from bank
-        if(userPieces.contains(piece)){
+        if(setUpPhase){
             //check player side boundary
-            if(newY > PLAYER_ZONE_LIMIT) return false;
+            if(newX < PLAYER_ZONE_LIMIT) return false;
             if(board.getBoard()[newX][newY] != null) return false;
             return true;
         }
