@@ -29,6 +29,8 @@ public class Game {
     private Date endTime;
     private int gameId;
     private boolean gamewon;
+    private int ai_charsLost;
+    private int user_charsLost;
 
     private String userName;
 
@@ -55,6 +57,10 @@ public class Game {
         gamewon = false;
 
         initPieces();
+
+        gamewon = false;
+        ai_charsLost = 0;
+        user_charsLost = 0;
     }
 
     private void initPieces(){
@@ -172,6 +178,9 @@ public class Game {
             if(destination != null){
                 interact(piece, destination);
                 //to be added, check here if gamewon is true assuming we reached flag
+                if(user_charsLost == 36 || ai_charsLost == 36){
+                    gamewon = true;
+                }
                 return true;
             }else {
                 if (movePiece(piece, newX, newY)) {
@@ -258,6 +267,7 @@ public class Game {
         String attack_col = attacker.getPlayer().getColor();
         String defend_col = defender.getPlayer().getColor();
 
+
         //check if piece is a flag or a bomb and dont let it be interacted with
         if(selectedpiece.equals("Flag") || selectedpiece.equals("Bomb")){
             System.out.println("Invalid, these pieces cannot be moved");
@@ -266,6 +276,7 @@ public class Game {
         //check special cases for bomb
         //if a miner attacks a bomb, destroy the bomb
         if(selectedpiece.equals("Miner") && destinationpiece.equals("Bomb")){
+            board.removePiece(defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
@@ -278,14 +289,17 @@ public class Game {
         }
         //if a non miner piece attacks bomb, destroy the piece
         if(!selectedpiece.equals("Miner") && destinationpiece.equals("Bomb")){
+            board.removePiece(attacker.getxPos(), attacker.getyPos());
             attacker.setxPos(-1);
             attacker.setyPos(-1);
             //send to appropriate graveyard
             if(attack_col.equals("Red")){
                 userGraveyard.add(attacker);
+                user_charsLost++;
             }
             else if(attack_col.equals("Blue")){
                 aiGraveyard.add(attacker);
+                ai_charsLost++;
             }
         }
 
@@ -296,59 +310,73 @@ public class Game {
 
         //if spy attacks marshall
         if(selectedpiece.equals("Spy") && destinationpiece.equals("Marshall")){
+            board.removePiece(defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
             if(defend_col.equals("Red")){
                 userGraveyard.add(defender);
+                user_charsLost++;
             }
             else if(defend_col.equals("Blue")){
                 aiGraveyard.add(defender);
+                ai_charsLost++;
             }
         }
 
         //if marshall attacks spy
         if(selectedpiece.equals("Marshall") && destinationpiece.equals("Spy")){
+            board.removePiece(defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
             if(defend_col.equals("Red")){
                 userGraveyard.add(defender);
+                user_charsLost++;
             }
             else if(defend_col.equals("Blue")){
                 aiGraveyard.add(defender);
+                ai_charsLost++;
             }
         }
 
 
         //otherwise see if our attacker is stronger than defender
         else if(selectedstr > destinationstr){
+            board.removePiece(defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
             if(defend_col.equals("Red")){
                 userGraveyard.add(defender);
+                user_charsLost++;
             }
             else if(defend_col.equals("Blue")){
                 aiGraveyard.add(defender);
+                ai_charsLost++;
             }
 
         }
         //if defender is stronger than attacker
         else if(selectedstr < destinationstr){
+            board.removePiece(attacker.getxPos(), attacker.getyPos());
             attacker.setxPos(-1);
             attacker.setyPos(-1);
             //send to appropriate graveyard
             if(attack_col.equals("Red")){
                 userGraveyard.add(attacker);
+                user_charsLost++;
             }
             else if(attack_col.equals("Blue")){
                 aiGraveyard.add(attacker);
+                ai_charsLost++;
             }
         }
 
         //if they are of equal strength destroy both
         else if(selectedstr == destinationstr){
+            board.removePiece(attacker.getxPos(), attacker.getyPos());
+            board.removePiece(defender.getxPos(), defender.getyPos());
             attacker.setxPos(-1);
             attacker.setyPos(-1);
             defender.setxPos(-1);
@@ -356,16 +384,20 @@ public class Game {
             //send to appropriate graveyards
             if(attack_col.equals("Red")){
                 userGraveyard.add(attacker);
+                user_charsLost++;
             }
             else if(attack_col.equals("Blue")){
                 aiGraveyard.add(attacker);
+                ai_charsLost++;
             }
 
             if(defend_col.equals("Red")){
                 userGraveyard.add(defender);
+                user_charsLost++;
             }
             else if(defend_col.equals("Blue")){
                 aiGraveyard.add(defender);
+                ai_charsLost++;
             }
 
         }
