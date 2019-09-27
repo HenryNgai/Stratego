@@ -1,12 +1,7 @@
-package com.CSE308.Stratego.model.dao;
+package com.CSE308.Stratego.model;
 
-import javax.persistence.*;
 
-@Entity
 public class Player{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private String name;
     private String color;
 
