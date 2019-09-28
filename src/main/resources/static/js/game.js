@@ -72,6 +72,16 @@ $(document).ready(function($) {
                     if (data == "False") {
                       return $(ui.draggable).addClass('drag-revert');
                     }
+                    else if(data == "W"){
+                       //Remove defending piece
+                       //Allow the move
+                    }
+                    else if(data == "D"){
+                        //Remove both
+                    }
+                    else if(data == "L"){
+                        //Remove user piece.
+                    }
                 }
                 );
 
@@ -83,6 +93,11 @@ $(document).ready(function($) {
 function init(){
     $('.wrapper').html( '' );
     $('#pieces').html( '' );
+    // Calls backend to get user data.
+    $.get("AIsetup", function(data){
+
+
+    });
 
     for (var i=0; i<6; i++ ) {
         $('#pieces').append('<div class="draggable" id = Bomb'+(i+1)+'></div>');
