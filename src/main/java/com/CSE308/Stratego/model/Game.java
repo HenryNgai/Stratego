@@ -28,6 +28,7 @@ public class Game {
     private Date endTime;
     private int gameId;
     private boolean gamewon;
+    private boolean gamelost;
     private int ai_charsLost;
     private int user_charsLost;
 
@@ -58,6 +59,7 @@ public class Game {
         initPieces();
 
         gamewon = false;
+        gamelost = false;
         ai_charsLost = 0;
         user_charsLost = 0;
     }
@@ -116,7 +118,7 @@ public class Game {
     }
 
 
-    public boolean makeMove(String name, int x, int y, int newX, int newY, boolean isAi){
+    public String makeMove(String name, int x, int y, int newX, int newY, boolean isAi){
         if(setUpPhase){
             if(x == -1) {
                 if (addPieceFromBank(name, newX, newY, isAi)) {
@@ -124,21 +126,23 @@ public class Game {
                         setUpPhase = false;
                         battlePhase = true;
                     }
-                    return true;
+                    return "True";
                 }
             }else{
                 return movePieceOnBoard(x, y, newX, newY);
             }
-            return false;
+            return "False";
         }if(battlePhase){
-            if(movePieceOnBoard(x,y,newX,newY)){
+            String result = movePieceOnBoard(x,y,newX,newY);
+            if(!result.equals("False")){
+                //TODO make ai return x and y and newx and newy
                 aiMovePiece();
                 //method to check if game over
-                return true;
+                return result;
             }
-            return false;
+            return "False";
         }
-        return false;
+        return "False";
     }
 
     private void aiMovePiece(){
@@ -171,27 +175,29 @@ public class Game {
     }
 
 
-    public boolean movePieceOnBoard(int x, int y, int newX, int newY){
+    public String movePieceOnBoard(int x, int y, int newX, int newY){
         BoardPiece piece = getPieceFromBoard(x,y);
         // Checks if there is a piece at source
         if(piece != null){
             // checks if there is a piece at destination
-            if(!checkValidMove(piece, newX,newY)) return false;
+            if(!checkValidMove(piece, newX,newY)) return "False";
             BoardPiece destination = getPieceFromBoard(newX, newY);
             if(destination != null){
-                interact(piece, destination);
+                String result = interact(piece, destination);
                 //to be added, check here if gamewon is true assuming we reached flag
-                if(user_charsLost == 36 || ai_charsLost == 36){
+                if(user_charsLost == 36){
                     gamewon = true;
+                }else if(ai_charsLost == 36){
+                    gamelost = true;
                 }
-                return true;
+                return result;
             }else {
                 if (movePiece(piece, newX, newY)) {
-                    return true;
+                    return "True";
                 }
             }
         }
-        return false;
+        return "False";
     }
 
     public boolean movePiece(BoardPiece piece, int newX, int newY){
@@ -263,7 +269,7 @@ public class Game {
 
     public String aiSetup(){
         ArrayList<BoardPiece> aiPieces = getAiPieces();
-        Collections.shuffle(aiPieces);
+        Collections.shuffle(this.aiPieces);
         String toReturn = "";
         int loop = aiPieces.size();
         for(int i=0;i<loop;i++){
@@ -273,12 +279,13 @@ public class Game {
             makeMove(name,-1,-1,x,y,true);
             toReturn += name + " ";
         }
+
         toReturn = toReturn.trim();
         return toReturn;
 
     }
 
-    private void interact(BoardPiece attacker, BoardPiece defender){
+    private String interact(BoardPiece attacker, BoardPiece defender){
         //do battle/bomb/flag/etc
         String selectedpiece = attacker.getName();
         String destinationpiece = defender.getName();
@@ -294,7 +301,7 @@ public class Game {
         //check if piece is a flag or a bomb and dont let it be interacted with
         if(selectedpiece.equals("Flag") || selectedpiece.equals("Bomb")){
             System.out.println("Invalid, these pieces cannot be moved");
-            return;
+            return "False";
         }
 
         //check special cases for bomb
@@ -312,6 +319,7 @@ public class Game {
             else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
             }
+            return "W";
         }
         //if a non miner piece attacks bomb, destroy the piece
         if(!selectedpiece.equals("Miner") && destinationpiece.equals("Bomb")){
@@ -328,12 +336,17 @@ public class Game {
                 aiGraveyard.add(attacker);
                 ai_charsLost++;
             }
+            return "L";
         }
 
         //if we touch the flag, game is won
         if(destinationpiece.equals("Flag")){
             defender.setKilledBy(attacker);
-            gamewon = true;
+            if(defender.getPlayer().getName().equals("Opponent")){
+                gamelost = true;
+            }else {
+                gamewon = true;
+            }
         }
 
         //if spy attacks marshall
@@ -352,6 +365,7 @@ public class Game {
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
+            return "W";
         }
 
         //if marshall attacks spy
@@ -370,6 +384,7 @@ public class Game {
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
+            return "W";
         }
 
 
@@ -389,6 +404,7 @@ public class Game {
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
+            return "W";
 
         }
         //if defender is stronger than attacker
@@ -406,6 +422,7 @@ public class Game {
                 aiGraveyard.add(attacker);
                 ai_charsLost++;
             }
+            return "L";
         }
 
         //if they are of equal strength destroy both
@@ -436,10 +453,11 @@ public class Game {
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
+            return "D";
 
         }
 
-
+        return "False";
     }
 
 

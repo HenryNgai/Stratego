@@ -107,16 +107,21 @@ public class StrategoController {
         System.out.println(x2);
         System.out.println(y2);
         System.out.println(AI);
+
+        String result = game.makeMove(piece, Integer.parseInt(x1), Integer.parseInt(y1), Integer.parseInt(x2), Integer.parseInt(y2), Boolean.parseBoolean(AI));
+        result = result + " 0 0 0 0";
         return new ResponseEntity<>("result successful result",
                 HttpStatus.OK);
     }
 
     @GetMapping("/AIsetup")
     @ResponseBody
+
     public String setupAI(HttpServletResponse response){
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
         return game.aiSetup();
+
     }
 
 
