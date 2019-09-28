@@ -18,7 +18,7 @@
         <button type="button" onclick="location.href='/game'" class="play btn btn-primary">Play Game</button>
         <button type="button" class="quick btn btn-primary">Quick Game (AI vs AI)</button>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">View Past Games</button>
-        <button type="button" class="score btn btn-primary">View Score</button>
+        <button type="button" onclick="location.href='/'" class="score btn btn-primary">Quit</button>
     </div>
 </div>
 <!-- Modal -->
@@ -35,18 +35,21 @@
                 <div th:if="${not #lists.isEmpty(results)}">
                     <table class="table table-striped">
                         <thead>
-                            <tr>
-                                <th scope="col">Email</th>
-                                <th scope="col">Game Number</th>
-                                <th scope="col">Winner</th>
-                            </tr>
+                        <tr>
+                            <th scope="col">Email</th>
+                            <th scope="col">Game Number</th>
+                            <th scope="col">Winner</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="result : ${results}">
-                                <td scope="row" th:text="${result.username}"></td>
-                                <td th:text="${result.gameId}"></td>
-                                <td th:text="${result.won}"></td>
-                            </tr>
+                        <tr th:each="result : ${results}">
+                            <td scope="row" th:text="${result.username}"></td>
+                            <td>
+                                <a th:text="${result.gameId}" href="GetGameDetails()"></a>
+
+                            </td>
+                            <td th:text="${result.won}"></td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -57,5 +60,36 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="GameDetails" tabindex="-1" role="dialog" aria-labelledby="GameDetailsTitle" aria-hidden="true">
+    <div class="modal-dialog mw-100 w-75 modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GameDetailsTitle">Game Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Game Number</th>
+                            <th scope="col">Piece</th>
+                            <th scope="col">Killed By</th>
+                        </tr>
+                        </thead>
+                        <tbody id = "GameDetailsBody">
+                        </tbody>
+                    </table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
