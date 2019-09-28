@@ -22,6 +22,17 @@ public class User {
         return email;
     }
 
+    @Column(name = "NumberofGamesPlayed")
+    private int NumberofGamesPlayed;
+
+    public int getNumberofGamesPlayed() {
+        return NumberofGamesPlayed;
+    }
+
+    public void setNumberofGamesPlayed(int numberofGamesPlayed) {
+        NumberofGamesPlayed = numberofGamesPlayed;
+    }
+
     @Column(name = "email")
     @Email(message = "*Please provide a valid Email")
     @NotEmpty(message = "*Please provide an email")

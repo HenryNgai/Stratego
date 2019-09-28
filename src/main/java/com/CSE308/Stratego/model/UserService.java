@@ -1,31 +1,24 @@
 package com.CSE308.Stratego.model;
 
-import com.CSE308.Stratego.model.dao.Role;
-import com.CSE308.Stratego.model.dao.RoleRepository;
-import com.CSE308.Stratego.model.dao.User;
-import com.CSE308.Stratego.model.dao.UserRepository;
+import com.CSE308.Stratego.model.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 @Service("userService")
 public class UserService {
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    public UserService(UserRepository userRepository,
-                       RoleRepository roleRepository,
-                       BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    @Autowired private UserRepository userRepository;
+    @Autowired private RoleRepository roleRepository;
+    @Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired private PastGameRepository pastGameRepository;
+    @Autowired private GameDetailRepository gameDetailRepository;
+
 
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -36,7 +29,16 @@ public class UserService {
         user.setActive(1);
         Role userRole = roleRepository.findByRole("ADMIN");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+        user.setNumberofGamesPlayed(0);
         userRepository.save(user);
+    }
+
+    public int getGameID(String email) {
+        return userRepository.Getgameid(email);
+    }
+
+    public List<PastGame> getAllGameResults(String email) {
+        return pastGameRepository.GetPastGames(email);
     }
 
 }
