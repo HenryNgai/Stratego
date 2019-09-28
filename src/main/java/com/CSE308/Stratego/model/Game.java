@@ -1,6 +1,7 @@
 package com.CSE308.Stratego.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 public class Game {
@@ -256,6 +257,23 @@ public class Game {
             if(!piece.getPlayer().getName().equals("Opponent")) return false;
         }
         return true;
+    }
+
+    public String aiSetup(){
+        ArrayList<BoardPiece> aiPieces = getAiPieces();
+        Collections.shuffle(aiPieces);
+        String toReturn = "";
+        int loop = aiPieces.size();
+        for(int i=0;i<loop;i++){
+            int x = i/10;
+            int y= i%10;
+            String name = aiPieces.get(0).getName();
+            makeMove(name,-1,-1,x,y,true);
+            toReturn += name + " ";
+            toReturn = toReturn.trim();
+        }
+        return toReturn;
+
     }
 
     private void interact(BoardPiece attacker, BoardPiece defender){
