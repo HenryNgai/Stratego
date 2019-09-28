@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
@@ -25,8 +26,6 @@ public class StrategoController {
 
     @Autowired
     private UserService userService;
-
-    Game game;
 
     @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
@@ -89,8 +88,6 @@ public class StrategoController {
         }
 
         game = new Game(email,userService.getGameID(email));
-        System.out.print(game.getGameId());
-        System.out.print(game.getUserName());
         return "/admin/game";
     }
 
@@ -115,8 +112,11 @@ public class StrategoController {
     }
 
     @GetMapping("/AIsetup")
-    public ResponseEntity<String> setupAI(){
-        return new ResponseEntity<>(game.aiSetup(), HttpStatus.OK);
+    @ResponseBody
+    public String setupAI(HttpServletResponse response){
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        return game.aiSetup();
     }
 
 
