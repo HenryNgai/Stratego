@@ -36,18 +36,16 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">Timestamp</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Game Number</th>
                                 <th scope="col">Winner</th>
-                                <th scope="col">Player Pieces Lost</th>
-                                <th scope="col">CPU Pieces Lost</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="result : ${results}">
-                                <td scope="row" th:text="${result.timestamp}"></td>
-                                <td th:text="${result.WinnerName}"></td>
-                                <td th:text="${result.PlayerPiecesLost}"></td>
-                                <td th:text="${result.CPUPiecesLost}"></td>
+                                <td scope="row" th:text="${result.username}"></td>
+                                <td th:text="${result.gameId}"></td>
+                                <td th:text="${result.won}"></td>
                             </tr>
                         </tbody>
                     </table>

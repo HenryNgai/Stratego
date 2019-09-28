@@ -7,17 +7,21 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
 @Controller
 public class StrategoController {
-
+    
     private Game game;
 
     @Autowired
@@ -61,12 +65,29 @@ public class StrategoController {
     }
 
     @GetMapping("/home")
-    public String userIndex() {
+    public String homePage(Model model) {
+        String email ="";
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails)principal).getUsername();
+        } else {
+            email = principal.toString();
+        }
+        model.addAttribute("results", userService.getAllGameResults(email));
         return "/admin/home";
     }
 
     @GetMapping("/game")
     public String Game() {
+        String email ="";
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails)principal).getUsername();
+        } else {
+            email = principal.toString();
+        }
+
+        game = new Game(email,userService.getGameID(email));
         return "/admin/game";
     }
 
@@ -95,9 +116,12 @@ public class StrategoController {
 
     @GetMapping("/AIsetup")
     @ResponseBody
-    public String setupAI(){
 
-        return "";//String of AI with space delimiter
+    public String setupAI(HttpServletResponse response){
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        return game.aiSetup();
+
     }
 
 
