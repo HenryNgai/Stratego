@@ -95,8 +95,11 @@ function init(){
     $('#pieces').html( '' );
     // Calls backend to get user data.
     $.get("AIsetup", function(data){
-
-
+        var array = data.split(" ");
+        for (var i = 0; i<array.length;i++){
+            $('.box'+i).append('<div class="draggable" id ='+array[i]+'></div>');
+            $('#'+array[i]).prepend($('<img>',{class:"img-fluid",src:'../images/'+array[i]+'.png'}));
+        }
     });
 
     for (var i=0; i<6; i++ ) {
