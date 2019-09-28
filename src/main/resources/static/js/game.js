@@ -95,8 +95,16 @@ function init(){
     $('#pieces').html( '' );
     // Calls backend to get user data.
     $.get("AIsetup", function(data){
-
-
+        var array = data.split(" ");
+        var count = 41;
+        var w=$('.droppable').width();
+        var h=$('.droppable').height();
+        for (var i = 0; i<array.length;i++){
+            $('#Box'+i).append('<div class="draggable" id ='+array[i]+count+'></div>');
+            $('#'+array[i]+count).prepend($('<img>',{class:"img-fluid",src:'../images/'+array[i]+'.png'}));
+            $('#'+array[i]+count).css({"position":"absolute","width":w, "height":h});
+            count++;
+        }
     });
 
     for (var i=0; i<6; i++ ) {
