@@ -26,8 +26,6 @@ public class StrategoController {
     @Autowired
     private UserService userService;
 
-    Game game;
-
     @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
         ModelAndView modelAndView = new ModelAndView();
@@ -114,12 +112,6 @@ public class StrategoController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/AIsetup")
-    @ResponseBody
-    public String setupAI(){
-
-        return //String of AI with space delimiter
-    }
 
 
 }
