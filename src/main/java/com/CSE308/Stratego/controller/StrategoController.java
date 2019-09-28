@@ -7,7 +7,10 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +25,8 @@ public class StrategoController {
 
     @Autowired
     private UserService userService;
+
+    Game game;
 
     @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
@@ -61,12 +66,31 @@ public class StrategoController {
     }
 
     @GetMapping("/home")
-    public String userIndex() {
+    public String homePage(Model model) {
+        String email ="";
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails)principal).getUsername();
+        } else {
+            email = principal.toString();
+        }
+        model.addAttribute("results", userService.getAllGameResults(email));
         return "/admin/home";
     }
 
     @GetMapping("/game")
     public String Game() {
+        String email ="";
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails)principal).getUsername();
+        } else {
+            email = principal.toString();
+        }
+
+        game = new Game(email,userService.getGameID(email));
+        System.out.print(game.getGameId());
+        System.out.print(game.getUserName());
         return "/admin/game";
     }
 
