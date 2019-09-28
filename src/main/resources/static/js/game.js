@@ -42,6 +42,66 @@ $(document).ready(function($) {
             }
 
             $(dropped).draggable({ containment: '.wrapper',cursor: 'move'});
+
+            var boxNumber = parseInt(this.id.substring(3));
+            var coordx = Math.floor(boxNumber/10);
+            var coordy = Math.floor(boxNumber%10);
+            var isAI = "False";
+            var pieceName = $(dropped).attr('id')
+            pieceName = pieceName.replace(/[0-9]/g, '');
+
+            var return_value = false;
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/validate-move",
+                data: {
+                    piece: pieceName,
+                    previousX: prevX,
+                    previousY: prevY,
+                    newX: coordx,
+                    newY: coordy,
+                    AI: isAI
+                },
+                success: function(data){
+                    var arrayData = data.split(" ");
+                    if (arrayData[0] == "False") {
+                      dropped.children().remove
+                      return_value = true;
+                    }
+                    else if(arrayData[0] == "W"){
+                        // remove
+                        droppedOn.children().remove();
+                        //AI MOVE
+                    }
+                    else if(arrayData[0] == "D"){
+                        //Remove both
+                        droppedOn.children().remove();
+                        dropped.remove();
+                        //AI Move
+
+                    }
+                    else if(arrayData[0] == "L"){
+                        //Remove user piece.
+                        dropped.remove();
+
+                        //AI Move
+                    }
+                    else if (arrayData[0] == "GW"){
+                        //Render win page
+
+                    }
+                    else if (arrayData[0] == "GL"){
+                        //Render lost page
+                    }
+                }
+            });
+
+            console.log(return_value);
+            if (return_value){
+                return $(ui.draggable).addClass('drag-revert');
+            }
+
             $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
             ui.draggable.position({
                 of: $(this),
@@ -50,41 +110,7 @@ $(document).ready(function($) {
                 using: function (css, calc) {
                     $(this).animate(css, 0, 'linear');
                 }
-
             });
-
-        var boxNumber = parseInt(this.id.substring(3));
-        var coordx = Math.floor(boxNumber/10);
-        var coordy = Math.floor(boxNumber%10);
-        var isAI = "False";
-        var pieceName = $(dropped).attr('id')
-        pieceName = pieceName.replace(/[0-9]/g, '');
-           $.post("validate-move",
-                {
-                    piece: pieceName,
-                    previousX: prevX,
-                    previousY: prevY,
-                    newX: coordx,
-                    newY: coordy,
-                    AI: isAI
-                },
-                function(data){
-                    if (data == "False") {
-                      return $(ui.draggable).addClass('drag-revert');
-                    }
-                    else if(data == "W"){
-                       //Remove defending piece
-                       //Allow the move
-                    }
-                    else if(data == "D"){
-                        //Remove both
-                    }
-                    else if(data == "L"){
-                        //Remove user piece.
-                    }
-                }
-                );
-
         }});
 
 });
@@ -95,8 +121,16 @@ function init(){
     $('#pieces').html( '' );
     // Calls backend to get user data.
     $.get("AIsetup", function(data){
-
-
+        var array = data.split(" ");
+        var count = 41;
+        var w=$('.droppable').width();
+        var h=$('.droppable').height();
+        for (var i = 0; i<array.length;i++){
+            $('#Box'+i).append('<div class="draggable" id ='+array[i]+count+'></div>');
+            $('#'+array[i]+count).prepend($('<img>',{class:"img-fluid",src:'../images/'+array[i]+'.png'}));
+            $('#'+array[i]+count).css({"position":"absolute","width":w, "height":h});
+            count++;
+        }
     });
 
     for (var i=0; i<6; i++ ) {
