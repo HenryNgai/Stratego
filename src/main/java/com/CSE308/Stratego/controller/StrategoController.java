@@ -93,6 +93,7 @@ public class StrategoController {
     @GetMapping("/AIsetup")
     @ResponseBody
     public String setupAI(){
+
         return //String of AI with space delimiter
     }
 
