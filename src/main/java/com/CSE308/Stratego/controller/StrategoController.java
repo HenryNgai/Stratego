@@ -101,12 +101,7 @@ public class StrategoController {
                                        @RequestParam("previousX") String x1, @RequestParam("previousY") String y1,
                                        @RequestParam("newX") String x2, @RequestParam ("newY") String y2,
                                        @RequestParam("AI") String AI) {
-        System.out.println(piece);
-        System.out.println(x1);
-        System.out.println(y1);
-        System.out.println(x2);
-        System.out.println(y2);
-        System.out.println(AI);
+
         return new ResponseEntity<>("result successful result",
                 HttpStatus.OK);
     }
