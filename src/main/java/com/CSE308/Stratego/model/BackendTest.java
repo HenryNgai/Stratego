@@ -49,7 +49,8 @@ public class BackendTest {
             }
 
             if(game.isSetUpPhase() && game.getUserPieces().isEmpty()){
-                aiSetup();
+                System.out.println(game.aiSetup());
+
             }
 
 

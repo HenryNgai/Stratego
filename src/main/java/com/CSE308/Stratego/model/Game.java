@@ -26,6 +26,7 @@ public class Game {
     private Date endTime;
     private int gameId;
     private boolean gamewon;
+    private boolean gamelost;
     private int ai_charsLost;
     private int user_charsLost;
 
@@ -56,6 +57,7 @@ public class Game {
         initPieces();
 
         gamewon = false;
+        gamelost = false;
         ai_charsLost = 0;
         user_charsLost = 0;
     }
@@ -179,8 +181,10 @@ public class Game {
             if(destination != null){
                 interact(piece, destination);
                 //to be added, check here if gamewon is true assuming we reached flag
-                if(user_charsLost == 36 || ai_charsLost == 36){
+                if(user_charsLost == 36){
                     gamewon = true;
+                }else if(ai_charsLost == 36){
+                    gamelost = true;
                 }
                 return true;
             }else {
@@ -261,7 +265,7 @@ public class Game {
 
     public String aiSetup(){
         ArrayList<BoardPiece> aiPieces = getAiPieces();
-        Collections.shuffle(aiPieces);
+        Collections.shuffle(this.aiPieces);
         String toReturn = "";
         int loop = aiPieces.size();
         for(int i=0;i<loop;i++){
@@ -272,6 +276,7 @@ public class Game {
             toReturn += name + " ";
             toReturn = toReturn.trim();
         }
+
         return toReturn;
 
     }
@@ -331,7 +336,11 @@ public class Game {
         //if we touch the flag, game is won
         if(destinationpiece.equals("Flag")){
             defender.setKilledBy(attacker);
-            gamewon = true;
+            if(defender.getPlayer().getName().equals("Opponent")){
+                gamelost = true;
+            }else {
+                gamewon = true;
+            }
         }
 
         //if spy attacks marshall
