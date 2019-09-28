@@ -97,15 +97,17 @@ public class StrategoController {
     }
 
     @PostMapping("/validate-move")
-    public ResponseEntity validateMove(@RequestParam("piece") String piece,
+    @ResponseBody
+    public String validateMove(@RequestParam("piece") String piece,
                                        @RequestParam("previousX") String x1, @RequestParam("previousY") String y1,
                                        @RequestParam("newX") String x2, @RequestParam ("newY") String y2,
-                                       @RequestParam("AI") String AI) {
+                                       @RequestParam("AI") String AI, HttpServletResponse response) {
 
         String result = game.makeMove(piece, Integer.parseInt(x1), Integer.parseInt(y1), Integer.parseInt(x2), Integer.parseInt(y2), Boolean.parseBoolean(AI));
         result = result + " 0 0 0 0";
-        return new ResponseEntity<>("result successful result",
-                HttpStatus.OK);
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        return result;
     }
 
     @GetMapping("/AIsetup")
