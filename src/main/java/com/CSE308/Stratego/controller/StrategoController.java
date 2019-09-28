@@ -17,7 +17,7 @@ import javax.validation.Valid;
 
 @Controller
 public class StrategoController {
-
+    
     private Game game;
 
     @Autowired
@@ -91,10 +91,8 @@ public class StrategoController {
     }
 
     @GetMapping("/AIsetup")
-    @ResponseBody
-    public String setupAI(){
-
-        return //String of AI with space delimiter
+    public ResponseEntity<String> setupAI(){
+        return new ResponseEntity<>(game.aiSetup(), HttpStatus.OK);
     }
 
 
