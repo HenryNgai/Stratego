@@ -31,7 +31,8 @@ public class BackendTest {
                 int newX = scn.nextInt();
                 System.out.print("newY: ");
                 int newY = scn.nextInt();
-                if(!game.makeMove("", x,y,newX,newY, false)){
+                String result = game.makeMove("", x,y,newX,newY, false);
+                if(result.equals("False")){
                     System.out.println("Invalid move");
                 }
                 printBoard();
@@ -40,7 +41,8 @@ public class BackendTest {
                 int x = scn.nextInt();
                 System.out.print("Y: ");
                 int y = scn.nextInt();
-                if(!game.makeMove(input,-1,-1, x, y, false)){
+                String result = game.makeMove("", x,y,-1,1, false);
+                if(result.equals("False")){
                     System.out.println("Invalid placement");
                 }
                 printBoard();
