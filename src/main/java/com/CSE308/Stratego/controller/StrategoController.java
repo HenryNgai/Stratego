@@ -1,4 +1,5 @@
 package com.CSE308.Stratego.controller;
+import com.CSE308.Stratego.model.Game;
 import com.CSE308.Stratego.model.UserService;
 import com.CSE308.Stratego.model.dao.User;
 import com.CSE308.Stratego.model.dao.UserRepository;
@@ -16,6 +17,8 @@ import javax.validation.Valid;
 
 @Controller
 public class StrategoController {
+
+    private Game game;
 
     @Autowired
     private UserService userService;
