@@ -6,6 +6,7 @@ import com.CSE308.Stratego.model.dao.User;
 import com.CSE308.Stratego.model.dao.UserRepository;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -101,23 +102,24 @@ public class StrategoController {
 
     @PostMapping("/validate-move")
     @ResponseBody
-    public String validateMove(@RequestParam("piece") String piece,
+    public ResponseEntity<String> validateMove(@RequestParam("piece") String piece,
                                        @RequestParam("previousX") String x1, @RequestParam("previousY") String y1,
                                        @RequestParam("newX") String x2, @RequestParam ("newY") String y2,
                                        @RequestParam("AI") String AI, HttpServletResponse response) throws IOException {
 
         String result = game.makeMove(piece, Integer.parseInt(x1), Integer.parseInt(y1), Integer.parseInt(x2), Integer.parseInt(y2), Boolean.parseBoolean(AI));
 
+        HttpHeaders headers = new HttpHeaders();
+
+
         if(game.isGamelost()){
-            response.sendRedirect("/lost");
+            headers.add("endgame", "lost");
         }
         if(game.isGamewon()){
-            response.sendRedirect("/won");
+            headers.add("endgame", "won");
         }
 
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-        return result;
+        return new ResponseEntity<>(result,headers, HttpStatus.OK);
 
     }
 
