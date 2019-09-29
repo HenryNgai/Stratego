@@ -160,4 +160,12 @@ public class StrategoController {
         return "admin/end";
     }
 
+    @GetMapping("/autoMove")
+    public String autoMove(){
+        //Random user move
+        //Random AI Move
+        //Return string with oldX, oldY, newX, newY, oldAIx, oldAIy, newAIx, newAIy
+        return response;
+    }
+
 }
