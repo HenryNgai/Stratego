@@ -66,24 +66,29 @@ $(document).ready(function($) {
                 success: function(data){
                     var arrayData = data.split(" ");
                     if (arrayData[0] == "False") {
-                      dropped.children().remove
                       return_value = true;
                     }
                     else if(arrayData[0] == "W"){
                         // remove
-                        droppedOn.children().remove();
+                        $(droppedOn.children()).detach().appendTo('#pieces');
+                        $(dropped).detach().appendTo(droppedOn);
+
+                        $('#pieces div').removeAttr('style');
                         //AI MOVE
                     }
                     else if(arrayData[0] == "D"){
                         //Remove both
-                        droppedOn.children().remove();
-                        dropped.remove();
+                        $(droppedOn.children()).detach().appendTo('#pieces');
+                        $(dropped).detach().appendTo('#pieces');
+                        $('#pieces div').removeAttr('style');
                         //AI Move
 
                     }
                     else if(arrayData[0] == "L"){
                         //Remove user piece.
-                        dropped.remove();
+                        alert("Loss. Your piece destroyed");
+                        $(dropped).detach().appendTo('#pieces');
+                        $('#pieces div').removeAttr('style');
 
                         //AI Move
                     }
@@ -94,15 +99,17 @@ $(document).ready(function($) {
                     else if (arrayData[0] == "GL"){
                         //Render lost page
                     }
+                    else{
+                        $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
+                    }
                 }
             });
 
-            console.log(return_value);
             if (return_value){
                 return $(ui.draggable).addClass('drag-revert');
             }
 
-            $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
+
             ui.draggable.position({
                 of: $(this),
                 my: 'left top',
