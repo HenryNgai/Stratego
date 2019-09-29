@@ -85,8 +85,8 @@ $(document).ready(function($) {
                     }
                     else if(arrayData[0] == "D"){
                         //Remove both
-                        $(droppedOn.children()).detach().appendTo('#pieces').removeAttr('style').removeClass();
-                        $(dropped).detach().appendTo('#pieces').removeAttr('style').removeClass();
+                        $(droppedOn.children()).detach().appendTo('#pieces').removeAttr("style").removeClass();
+                        $(dropped).detach().appendTo('#pieces').removeAttr("style").removeClass();
                         //AI Move
 
                     }
@@ -108,7 +108,7 @@ $(document).ready(function($) {
                     else{
                         $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
                     }
-
+                    $('#pieces div').removeAttr('style').removeClass();
                     var currAIpos = (parseInt(arrayData[1]) * 10) + parseInt(arrayData[2]);
                     var newAIpos = (parseInt(arrayData[3]) * 10) + parseInt(arrayData[4]);
 
@@ -268,4 +268,43 @@ function refresh() {
                 $(".droppable .draggable").css('width', w, 'height', h);
             }
         }
+}
+
+
+function autoSetup(){
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: "/autoSetup",
+        success: function(data){
+        alert("Ajax returned")
+        var array = data.split(" ");
+        var count = 0;
+        var w=$('.droppable').width();
+        var h=$('.droppable').height();
+        for (var i = 60; i<100;i++){
+            if($('#Box'+i).children().length == 0 && count<array.length){
+                $('#Box'+i).append('<div class="draggable" id ='+array[count]+(count+1)+'></div>');
+                $('#'+array[count]+(count+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_'+array[count]+'.png'}));
+                $('#'+array[count]+(count+1)).css({"position":"absolute","width":w, "height":h});
+                count++;
+            }
+        }
+        $('#pieces').html('');
+        }
+    });
+}
+
+
+
+function autoPlay(){
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: "/autoMove",
+        success: function(data){
+
+        }
+
+    });
 }
