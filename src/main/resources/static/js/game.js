@@ -63,7 +63,13 @@ $(document).ready(function($) {
                     newY: coordy,
                     AI: isAI
                 },
-                success: function(data){
+                success: function(data, textStatus, request){
+                    if (request.getResponseHeader("endgame") == "lost") {
+                        window.location = "/lost";
+                    }
+                    if (request.getResponseHeader("endgame") == "win") {
+                         window.location = "/win";
+                    }
                     var arrayData = data.split(" ");
                     console.log(arrayData);
                     if (arrayData[0] == "False") {
@@ -120,10 +126,11 @@ $(document).ready(function($) {
                     }
                     else if (arrayData[5] == "L"){
                         $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
-                        $($('#Box'+newAIpos).children()).detach().fadeOut("slow", function() { // code to run after the fadeOut is complete
-                            $(this).appendTo('#pieces').fadeIn('slow');
+                        $($('#Box'+newAIpos).children()[1]).detach().fadeOut("slow", function() { // code to run after the fadeOut is complete
+                            $(this).hide().prepend('#pieces');
+                            $('#pieces div').removeAttr('style').removeClass();
+                            $(this).show('slow');
                         })
-                        $('#pieces div').removeAttr('style').removeClass();
                     }
                     else{
                         $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
