@@ -160,6 +160,64 @@ public class Game {
             }
         }
         Collections.shuffle(piecesOnBoard);
+        //aggressive AI implementation
+        //find spot that has enemy piece in it and attack it
+        for(BoardPiece p: piecesOnBoard) {
+            int x = p.getxPos();
+            int y = p.getyPos();
+            int newX = x;
+            int newY = y;
+
+            //check down
+            newX = x+1;
+            newY = y;
+            if (newX < 10) {
+                //see only for spaces that have other players in them
+                if(isEnemyPresent(newX, newY, p.getPlayer())){
+                    String aiResult = movePieceOnBoard(x, y, newX, newY);
+                    response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
+                    break;
+                }
+            }
+
+            //check left
+            newX = x;
+            newY = y-1;
+            if (newY >= 0) {
+                if(isEnemyPresent(newX, newY, p.getPlayer())){
+                    String aiResult = movePieceOnBoard(x, y, newX, newY);
+                    response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
+                    break;
+                }
+            }
+            //check right
+            newX = x;
+            newY = y+1;
+            if (newY < 10) {
+                if(isEnemyPresent(newX, newY, p.getPlayer())){
+                    String aiResult = movePieceOnBoard(x, y, newX, newY);
+                    response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
+                    break;
+                }
+            }
+            //check up
+            newX = x-1;
+            newY = y;
+            if(newX >= 0){
+                if(isEnemyPresent(newX, newY, p.getPlayer())){
+                    String aiResult = movePieceOnBoard(x, y, newX, newY);
+                    response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
+                    break;
+                }
+            }
+
+
+        }
+
+
+
+        //regular non aggro AI
+
         for(BoardPiece p: piecesOnBoard){
             int x = p.getxPos();
             int y = p.getyPos();
@@ -338,12 +396,34 @@ public class Game {
         BoardPiece piece = getPieceFromBoard(newX, newY);
         if(piece != null){
             if(player.getColor().equals("Blue")) {
-                if(!piece.getPlayer().getName().equals("Opponent")) return false;
+                if(piece.getPlayer().getColor().equals("Blue")) return false;
             }else{
-                if(piece.getPlayer().getName().equals("Opponent")) return false;
+                if(piece.getPlayer().getColor().equals("Red")) return false;
             }
         }
         return true;
+    }
+
+    private boolean isEnemyPresent(int newX, int newY, Player player){
+        //check for rivers
+        if(newX >= RIVER1[0] && newX < RIVER1[2] && newY >= RIVER1[1] && newY < RIVER1[3]){
+            return false;
+        }
+        if(newX >= RIVER2[0] && newX < RIVER2[2] && newY >= RIVER2[1] && newY < RIVER2[3]){
+            return false;
+        }
+        //check for piece otherwise don't count as true
+        BoardPiece piece = getPieceFromBoard(newX, newY);
+        if(piece != null){
+            if(player.getColor().equals("Blue")) {
+                if(piece.getPlayer().getColor().equals("Blue")) return false;
+                else{ return true; }
+            }else{
+                if(piece.getPlayer().getColor().equals("Red")) return false;
+                else{ return true; }
+            }
+        }
+        return false;
     }
 
     public String aiSetup(){
