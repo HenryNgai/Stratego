@@ -159,13 +159,30 @@ public class StrategoController {
         model.addAttribute("message", "You Won!");
         return "admin/end";
     }
+    
+    @GetMapping("/autoMove")
+    public String autoMove(){
+        //Random user move
+        //Random AI Move
+        //Return string with oldX, oldY, newX, newY, oldAIx, oldAIy, newAIx, newAIy
 
-//    @GetMapping("/autoMove")
-////    public String autoMove(){
-////        //Random user move
-////        //Random AI Move
-////        //Return string with oldX, oldY, newX, newY, oldAIx, oldAIy, newAIx, newAIy
-//////        return response;
-////    }
+
+        String response = "";
+        response = response + game.aiMovePiece(game.getUser());
+        response = response + " " + game.aiMovePiece(game.getAi());
+        return response;
+    }
+
+    @GetMapping("/autoSetup")
+    public String autoSetup(){
+        //Random user move
+        //Random AI Move
+        //Return string with oldX, oldY, newX, newY, oldAIx, oldAIy, newAIx, newAIy
+
+
+        String response = game.autoSetup();
+        return response;
+    }
+
 
 }
