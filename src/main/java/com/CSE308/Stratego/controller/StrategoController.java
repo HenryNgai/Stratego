@@ -109,9 +109,11 @@ public class StrategoController {
         String result = game.makeMove(piece, Integer.parseInt(x1), Integer.parseInt(y1), Integer.parseInt(x2), Integer.parseInt(y2), Boolean.parseBoolean(AI));
 
         if(game.isGamelost()){
+            System.out.println("Lost Detected");
             response.sendRedirect("/lost");
         }
         if(game.isGamewon()){
+            System.out.println("Won detected");
             response.sendRedirect("/won");
         }
 
@@ -156,6 +158,14 @@ public class StrategoController {
     public String won(Model model){
         model.addAttribute("message", "You Won!");
         return "admin/end";
+    }
+
+    @GetMapping("/autoMove")
+    public String autoMove(){
+        //Random user move
+        //Random AI Move
+        //Return string with oldX, oldY, newX, newY, oldAIx, oldAIy, newAIx, newAIy
+        return response;
     }
 
 }
