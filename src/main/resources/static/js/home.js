@@ -1,0 +1,5 @@
+function GetGameDetails() {
+  $.ajax(){
+
+  }
+}
