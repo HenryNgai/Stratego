@@ -65,6 +65,7 @@ $(document).ready(function($) {
                 },
                 success: function(data){
                     var arrayData = data.split(" ");
+                    console.log(arrayData);
                     if (arrayData[0] == "False") {
                       return_value = true;
                     }
@@ -101,6 +102,31 @@ $(document).ready(function($) {
                     }
                     else{
                         $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
+                    }
+
+                    var currAIpos = (parseInt(arrayData[1]) * 10) + parseInt(arrayData[2]);
+                    var newAIpos = (parseInt(arrayData[3]) * 10) + parseInt(arrayData[4]);
+
+
+                    if(arrayData[5] == "W"){
+                        $($('#Box'+newAIpos).children()).detach().appendTo('#pieces');
+                        $('#pieces div').removeAttr('style');
+                        $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
+                    }
+                    else if (arrayData[5] == "D"){
+                        $($('#Box'+newAIpos).children()).detach().appendTo('#pieces');
+                        $($('#Box'+currAIpos).children()).detach().appendTo('#pieces');
+                        $('#pieces div').removeAttr('style');
+                    }
+                    else if (arrayData[5] == "L"){
+                        $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
+                        $($('#Box'+newAIpos).children()).detach().fadeOut("slow", function() { // code to run after the fadeOut is complete
+                            $(this).appendTo('#pieces').fadeIn('slow');
+                        })
+                        $('#pieces div').removeAttr('style');
+                    }
+                    else{
+                        $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
                     }
                 }
             });
