@@ -365,23 +365,22 @@ public class Game {
     }
 
     public String autoSetup(){
-        ArrayList<BoardPiece> userPieces = getUserPieces();
         Collections.shuffle(userPieces);
         String toReturn = "";
         int loop = userPieces.size();
-        for(int i=60;i<loop+60;i++){
+        for(int i=60;i<100;i++){
             int x = i/10;
             int y= i%10;
             if(getPieceFromBoard(x, y) != null){
-                i--;
                 continue;
             }
             String name = userPieces.get(0).getName();
-            makeMove(name,-1,-1,x,y,true);
+            makeMove(name,-1,-1,x,y,false);
             toReturn += name + " ";
         }
 
         toReturn = toReturn.trim();
+        System.out.println(toReturn);
         return toReturn;
 
     }

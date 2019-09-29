@@ -277,10 +277,20 @@ function autoSetup(){
         type: "GET",
         url: "/autoSetup",
         success: function(data){
-        var arrayData = data.split(" ");
-
-
-
+        alert("Ajax returned")
+        var array = data.split(" ");
+        var count = 0;
+        var w=$('.droppable').width();
+        var h=$('.droppable').height();
+        for (var i = 60; i<100;i++){
+            if($('#Box'+i).children().length == 0 && count<array.length){
+                $('#Box'+i).append('<div class="draggable" id ='+array[count]+(count+1)+'></div>');
+                $('#'+array[count]+(count+1)).prepend($('<img>',{class:"img-fluid",src:'../images/B_'+array[count]+'.png'}));
+                $('#'+array[count]+(count+1)).css({"position":"absolute","width":w, "height":h});
+                count++;
+            }
+        }
+        $('#pieces').html('');
         }
     });
 }
