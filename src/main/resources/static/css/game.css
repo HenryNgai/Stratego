@@ -51,6 +51,7 @@ img {
 }
 
 #pieces {
+          padding-top:30px;
           display: grid;
           grid-gap: 20px;
           overflow: auto;
