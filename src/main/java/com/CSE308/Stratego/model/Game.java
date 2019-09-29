@@ -249,9 +249,9 @@ public class Game {
                 String result = interact(piece, destination);
                 //to be added, check here if gamewon is true assuming we reached flag
                 if(user_charsLost == 36){
-                    gamewon = true;
-                }else if(ai_charsLost == 36){
                     gamelost = true;
+                }else if(ai_charsLost == 36){
+                    gamewon = true;
                 }
                 return result;
             }else {
