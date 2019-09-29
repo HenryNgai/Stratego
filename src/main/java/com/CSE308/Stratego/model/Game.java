@@ -415,9 +415,9 @@ public class Game {
         if(destinationpiece.equals("Flag")){
             defender.setKilledBy(attacker);
             if(defender.getPlayer().getName().equals("Opponent")){
-                gamelost = true;
-            }else {
                 gamewon = true;
+            }else {
+                gamelost = true;
             }
         }
 
