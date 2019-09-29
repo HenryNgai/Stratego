@@ -144,7 +144,7 @@ public class Game {
         return "False -1 -1 -1 -1";
     }
 
-    private String aiMovePiece(Player player){
+    public String aiMovePiece(Player player){
         //ai moves here
         if(gamewon) return "";
         String response = "";
@@ -166,6 +166,18 @@ public class Game {
             int newX = x;
             int newY = y;
 
+            if(p.getPlayer().getColor().equals("Blue")){
+                //check up for automated player first
+                newX = x-1;
+                newY = y;
+                if(newX >= 0){
+                    if(isSpaceAvailable(newX, newY, p.getPlayer())){
+                        String aiResult = movePieceOnBoard(x, y, newX, newY);
+                        response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
+                        break;
+                    }
+                }
+            }
             //check down
             newX = x+1;
             newY = y;
