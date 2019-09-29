@@ -1,5 +1,7 @@
 package com.CSE308.Stratego.model;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -343,9 +345,9 @@ public class Game {
             String name = aiPieces.get(0).getName();
             makeMove(name,-1,-1,x,y,true);
             toReturn += name + " ";
-            toReturn = toReturn.trim();
         }
 
+        toReturn = toReturn.trim();
         return toReturn;
 
     }

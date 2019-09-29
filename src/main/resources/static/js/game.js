@@ -42,25 +42,20 @@ $(document).ready(function($) {
             }
 
             $(dropped).draggable({ containment: '.wrapper',cursor: 'move'});
-            $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
-            ui.draggable.position({
-                of: $(this),
-                my: 'left top',
-                at: 'left top',
-                using: function (css, calc) {
-                    $(this).animate(css, 0, 'linear');
-                }
 
-            });
+            var boxNumber = parseInt(this.id.substring(3));
+            var coordx = Math.floor(boxNumber/10);
+            var coordy = Math.floor(boxNumber%10);
+            var isAI = "False";
+            var pieceName = $(dropped).attr('id')
+            pieceName = pieceName.replace(/[0-9]/g, '');
 
-        var boxNumber = parseInt(this.id.substring(3));
-        var coordx = Math.floor(boxNumber/10);
-        var coordy = Math.floor(boxNumber%10);
-        var isAI = "False";
-        var pieceName = $(dropped).attr('id')
-        pieceName = pieceName.replace(/[0-9]/g, '');
-           $.post("validate-move",
-                {
+            var return_value = false;
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/validate-move",
+                data: {
                     piece: pieceName,
                     previousX: prevX,
                     previousY: prevY,
@@ -68,23 +63,61 @@ $(document).ready(function($) {
                     newY: coordy,
                     AI: isAI
                 },
-                function(data){
-                    if (data == "False") {
-                      return $(ui.draggable).addClass('drag-revert');
+                success: function(data){
+                    var arrayData = data.split(" ");
+                    if (arrayData[0] == "False") {
+                      return_value = true;
                     }
-                    else if(data == "W"){
-                       //Remove defending piece
-                       //Allow the move
+                    else if(arrayData[0] == "W"){
+                        // remove
+                        $(droppedOn.children()).detach().appendTo('#pieces');
+                        $(dropped).detach().appendTo(droppedOn);
+
+                        $('#pieces div').removeAttr('style');
+                        //AI MOVE
                     }
-                    else if(data == "D"){
+                    else if(arrayData[0] == "D"){
                         //Remove both
+                        $(droppedOn.children()).detach().appendTo('#pieces');
+                        $(dropped).detach().appendTo('#pieces');
+                        $('#pieces div').removeAttr('style');
+                        //AI Move
+
                     }
-                    else if(data == "L"){
+                    else if(arrayData[0] == "L"){
                         //Remove user piece.
+                        alert("Loss. Your piece destroyed");
+                        $(dropped).detach().appendTo('#pieces');
+                        $('#pieces div').removeAttr('style');
+
+                        //AI Move
+                    }
+                    else if (arrayData[0] == "GW"){
+                        //Render win page
+
+                    }
+                    else if (arrayData[0] == "GL"){
+                        //Render lost page
+                    }
+                    else{
+                        $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
                     }
                 }
-                );
+            });
 
+            if (return_value){
+                return $(ui.draggable).addClass('drag-revert');
+            }
+
+
+            ui.draggable.position({
+                of: $(this),
+                my: 'left top',
+                at: 'left top',
+                using: function (css, calc) {
+                    $(this).animate(css, 0, 'linear');
+                }
+            });
         }});
 
 });
@@ -95,8 +128,16 @@ function init(){
     $('#pieces').html( '' );
     // Calls backend to get user data.
     $.get("AIsetup", function(data){
-
-
+        var array = data.split(" ");
+        var count = 41;
+        var w=$('.droppable').width();
+        var h=$('.droppable').height();
+        for (var i = 0; i<array.length;i++){
+            $('#Box'+i).append('<div class="draggable" id ='+array[i]+count+'></div>');
+            $('#'+array[i]+count).prepend($('<img>',{class:"img-fluid",src:'../images/'+array[i]+'.png'}));
+            $('#'+array[i]+count).css({"position":"absolute","width":w, "height":h});
+            count++;
+        }
     });
 
     for (var i=0; i<6; i++ ) {
