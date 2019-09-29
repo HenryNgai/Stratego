@@ -45,7 +45,8 @@
                         <tr th:each="result : ${results}">
                             <td scope="row" th:text="${result.username}"></td>
                             <td>
-                                <a th:text="${result.gameId}" href="GetGameDetails()"></a>
+                                <a th:text="${result.gameId}" href="GetGameDetails()" ></a>
+
 
                             </td>
                             <td th:text="${result.won}"></td>
