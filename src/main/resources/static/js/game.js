@@ -85,9 +85,8 @@ $(document).ready(function($) {
                     }
                     else if(arrayData[0] == "D"){
                         //Remove both
-                        $(droppedOn.children()).detach().appendTo('#pieces');
-                        $(dropped).detach().appendTo('#pieces');
-                        $('#pieces div').removeAttr('style').removeClass();
+                        $(droppedOn.children()).detach().appendTo('#pieces').removeAttr('style').removeClass();
+                        $(dropped).detach().appendTo('#pieces').removeAttr('style').removeClass();
                         //AI Move
 
                     }
