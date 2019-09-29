@@ -41,7 +41,7 @@ public class BackendTest {
                 int x = scn.nextInt();
                 System.out.print("Y: ");
                 int y = scn.nextInt();
-                String result = game.makeMove("", x,y,-1,1, false);
+                String result = game.makeMove(input, -1,-1,x,y, false);
                 if(result.equals("False")){
                     System.out.println("Invalid placement");
                 }
@@ -52,6 +52,7 @@ public class BackendTest {
 
             if(game.isSetUpPhase() && game.getUserPieces().isEmpty()){
                 System.out.println(game.aiSetup());
+                printBoard();
 
             }
 
