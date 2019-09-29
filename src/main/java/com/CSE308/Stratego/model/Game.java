@@ -1,14 +1,17 @@
 package com.CSE308.Stratego.model;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 public class Game {
 
     //boundaries for rivers and player zone
     // [minx, miny, maxx, maxy]
-    private final int RIVER1[] = {2,4,4,6};
-    private final int RIVER2[] = {6,4,8,6};
+    private final int RIVER1[] = {4,2,6,4};
+    private final int RIVER2[] = {4,6,6,8};
     private final int PLAYER_ZONE_LIMIT = 6;
 
     private Player user;
@@ -25,6 +28,7 @@ public class Game {
     private Date endTime;
     private int gameId;
     private boolean gamewon;
+    private boolean gamelost;
     private int ai_charsLost;
     private int user_charsLost;
 
@@ -51,10 +55,10 @@ public class Game {
         setUpPhase = true;
         battlePhase = false;
         gamewon = false;
+        gamelost = false;
 
         initPieces();
 
-        gamewon = false;
         ai_charsLost = 0;
         user_charsLost = 0;
     }
@@ -113,30 +117,99 @@ public class Game {
     }
 
 
-    public boolean makeMove(String name, int x, int y, int newX, int newY, boolean isAi){
+    public String makeMove(String name, int x, int y, int newX, int newY, boolean isAi){
         if(setUpPhase){
-            if(addPieceFromBank(name, newX, newY, isAi)){
-                if (userPieces.isEmpty() && aiPieces.isEmpty()) {
-                    setUpPhase = false;
-                    battlePhase = true;
+            if(x == -1) {
+                if (addPieceFromBank(name, newX, newY, isAi)) {
+                    if (userPieces.isEmpty() && aiPieces.isEmpty()) {
+                        setUpPhase = false;
+                        battlePhase = true;
+                    }
+                    return "True -1 -1 -1 -1";
                 }
-                return true;
+            }else{
+                return movePieceOnBoard(x, y, newX, newY) + " -1 -1 -1 -1";
             }
-            return false;
+            return "False -1 -1 -1 -1";
         }if(battlePhase){
-            if(movePieceOnBoard(x,y,newX,newY)){
-                aiMovePiece();
+            String result = movePieceOnBoard(x,y,newX,newY);
+            if(!result.equals("False")){
+                //TODO make ai return x and y and newx and newy
+                String aiCoordinates = aiMovePiece(ai);
                 //method to check if game over
-                return true;
+                return result + " " + aiCoordinates;
             }
-            return false;
+            return "False -1 -1 -1 -1";
         }
-        return false;
+        return "False -1 -1 -1 -1";
     }
 
-    private void aiMovePiece(){
+    private String aiMovePiece(Player player){
         //ai moves here
+        if(gamewon) return "";
+        String response = "";
 
+        ArrayList<BoardPiece> piecesOnBoard = new ArrayList<BoardPiece>();
+        for(int i=0;i<100;i++){
+            int x = i/10;
+            int y = i%10;
+            BoardPiece piece = getPieceFromBoard(x, y);
+            if(piece != null && !piece.isMoveable()) continue;
+            if(piece != null && piece.getPlayer().getName().equals(player.getName())){
+                piecesOnBoard.add(piece);
+            }
+        }
+        Collections.shuffle(piecesOnBoard);
+        for(BoardPiece p: piecesOnBoard){
+            int x = p.getxPos();
+            int y = p.getyPos();
+            int newX = x;
+            int newY = y;
+
+            //check down
+            newX = x+1;
+            newY = y;
+            if (newX < 10) {
+                if(isSpaceAvailable(newX, newY, p.getPlayer())){
+                    String aiResult = movePieceOnBoard(x, y, newX, newY);
+                    response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
+                    break;
+                }
+            }
+
+            //check left
+            newX = x;
+            newY = y-1;
+            if (newY >= 0) {
+                if(isSpaceAvailable(newX, newY, p.getPlayer())){
+                    String aiResult = movePieceOnBoard(x, y, newX, newY);
+                    response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
+                    break;
+                }
+            }
+            //check right
+            newX = x;
+            newY = y+1;
+            if (newY < 10) {
+                if(isSpaceAvailable(newX, newY, p.getPlayer())){
+                    String aiResult = movePieceOnBoard(x, y, newX, newY);
+                    response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
+                    break;
+                }
+            }
+            //check up
+            newX = x-1;
+            newY = y;
+            if(newX >= 0){
+                if(isSpaceAvailable(newX, newY, p.getPlayer())){
+                    String aiResult = movePieceOnBoard(x, y, newX, newY);
+                    response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
+                    break;
+                }
+            }
+
+        }
+        return response;
     }
 
 
@@ -165,27 +238,29 @@ public class Game {
     }
 
 
-    public boolean movePieceOnBoard(int x, int y, int newX, int newY){
+    public String movePieceOnBoard(int x, int y, int newX, int newY){
         BoardPiece piece = getPieceFromBoard(x,y);
         // Checks if there is a piece at source
         if(piece != null){
             // checks if there is a piece at destination
-            if(!checkValidMove(piece, newX,newY)) return false;
-            BoardPiece destination = board.getBoard()[newX][newY];
+            if(!checkValidMove(piece, newX,newY)) return "False";
+            BoardPiece destination = getPieceFromBoard(newX, newY);
             if(destination != null){
-                interact(piece, destination);
+                String result = interact(piece, destination);
                 //to be added, check here if gamewon is true assuming we reached flag
-                if(user_charsLost == 36 || ai_charsLost == 36){
+                if(user_charsLost == 36){
                     gamewon = true;
+                }else if(ai_charsLost == 36){
+                    gamelost = true;
                 }
-                return true;
+                return result;
             }else {
                 if (movePiece(piece, newX, newY)) {
-                    return true;
+                    return "True";
                 }
             }
         }
-        return false;
+        return "False";
     }
 
     public boolean movePiece(BoardPiece piece, int newX, int newY){
@@ -221,12 +296,12 @@ public class Game {
             if(newX == currX && newY == currY ) return false;
             if(newX != currX){
                 for(int i=currX+1; i<=newX; i++){
-                    if(!isSpaceAvailable(i, currY)) return false;
+                    if(!isSpaceAvailable(i, currY, piece.getPlayer())) return false;
                 }
                 return true;
             }else{
                 for(int i=currY+1; i<=newY; i++){
-                    if(!isSpaceAvailable(currX, i)) return false;
+                    if(!isSpaceAvailable(currX, i, piece.getPlayer())) return false;
                 }
                 return true;
             }
@@ -235,27 +310,49 @@ public class Game {
         double dist = Math.sqrt((((double)newX-(double)currX)*((double)newX-(double)currX))+(((double)newY-(double)currY)*((double)newY-(double)currY)));
         if(dist != 1.0)return false;
         //checks if space is available
-        return isSpaceAvailable(newX, newY);
+        return isSpaceAvailable(newX, newY, piece.getPlayer());
 
     }
 
-    private boolean isSpaceAvailable(int newX, int newY){
+    private boolean isSpaceAvailable(int newX, int newY, Player player){
         //check for rivers
-        if(newX > RIVER1[0] && newX < RIVER1[2] && newY > RIVER1[1] && newY < RIVER1[3]){
+        if(newX >= RIVER1[0] && newX < RIVER1[2] && newY >= RIVER1[1] && newY < RIVER1[3]){
             return false;
         }
-        if(newX > RIVER2[0] && newX < RIVER2[2] && newY > RIVER2[1] && newY < RIVER1[3]){
+        if(newX >= RIVER2[0] && newX < RIVER2[2] && newY >= RIVER2[1] && newY < RIVER2[3]){
             return false;
         }
         //check for piece
         BoardPiece piece = getPieceFromBoard(newX, newY);
         if(piece != null){
-            if(!piece.getPlayer().getName().equals("Opponent")) return false;
+            if(player.getColor().equals("Blue")) {
+                if(!piece.getPlayer().getName().equals("Opponent")) return false;
+            }else{
+                if(piece.getPlayer().getName().equals("Opponent")) return false;
+            }
         }
         return true;
     }
 
-    private void interact(BoardPiece attacker, BoardPiece defender){
+    public String aiSetup(){
+        ArrayList<BoardPiece> aiPieces = getAiPieces();
+        Collections.shuffle(this.aiPieces);
+        String toReturn = "";
+        int loop = aiPieces.size();
+        for(int i=0;i<loop;i++){
+            int x = i/10;
+            int y= i%10;
+            String name = aiPieces.get(0).getName();
+            makeMove(name,-1,-1,x,y,true);
+            toReturn += name + " ";
+        }
+
+        toReturn = toReturn.trim();
+        return toReturn;
+
+    }
+
+    private String interact(BoardPiece attacker, BoardPiece defender){
         //do battle/bomb/flag/etc
         String selectedpiece = attacker.getName();
         String destinationpiece = defender.getName();
@@ -265,15 +362,21 @@ public class Game {
         String defend_col = defender.getPlayer().getColor();
 
 
+        attacker.setVisible(true);
+        defender.setVisible(true);
+
         //check if piece is a flag or a bomb and dont let it be interacted with
         if(selectedpiece.equals("Flag") || selectedpiece.equals("Bomb")){
             System.out.println("Invalid, these pieces cannot be moved");
+            return "False";
         }
 
         //check special cases for bomb
         //if a miner attacks a bomb, destroy the bomb
         if(selectedpiece.equals("Miner") && destinationpiece.equals("Bomb")){
+            defender.setKilledBy(attacker);
             board.removePiece(defender.getxPos(), defender.getyPos());
+            movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
@@ -283,31 +386,46 @@ public class Game {
             else if(defend_col.equals("Red")){
                 aiGraveyard.add(defender);
             }
+            return "W";
         }
         //if a non miner piece attacks bomb, destroy the piece
         if(!selectedpiece.equals("Miner") && destinationpiece.equals("Bomb")){
+            attacker.setKilledBy(defender);
             board.removePiece(attacker.getxPos(), attacker.getyPos());
+            board.removePiece(defender.getxPos(), defender.getyPos());
             attacker.setxPos(-1);
             attacker.setyPos(-1);
+            defender.setxPos(-1);
+            defender.setyPos(-1);
             //send to appropriate graveyard
             if(attack_col.equals("Blue")){
                 userGraveyard.add(attacker);
+                aiGraveyard.add(defender);
                 user_charsLost++;
             }
             else if(attack_col.equals("Red")){
                 aiGraveyard.add(attacker);
+                userGraveyard.add(defender);
                 ai_charsLost++;
             }
+            return "D";
         }
 
         //if we touch the flag, game is won
         if(destinationpiece.equals("Flag")){
-            gamewon = true;
+            defender.setKilledBy(attacker);
+            if(defender.getPlayer().getName().equals("Opponent")){
+                gamelost = true;
+            }else {
+                gamewon = true;
+            }
         }
 
         //if spy attacks marshall
         if(selectedpiece.equals("Spy") && destinationpiece.equals("Marshall")){
+            defender.setKilledBy(attacker);
             board.removePiece(defender.getxPos(), defender.getyPos());
+            movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
@@ -319,11 +437,14 @@ public class Game {
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
+            return "W";
         }
 
         //if marshall attacks spy
         if(selectedpiece.equals("Marshall") && destinationpiece.equals("Spy")){
+            defender.setKilledBy(attacker);
             board.removePiece(defender.getxPos(), defender.getyPos());
+            movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
@@ -335,12 +456,15 @@ public class Game {
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
+            return "W";
         }
 
 
         //otherwise see if our attacker is stronger than defender
         else if(selectedstr > destinationstr){
+            defender.setKilledBy(attacker);
             board.removePiece(defender.getxPos(), defender.getyPos());
+            movePieceOnBoard(attacker.getxPos(), attacker.getyPos(), defender.getxPos(), defender.getyPos());
             defender.setxPos(-1);
             defender.setyPos(-1);
             //send to appropriate graveyard
@@ -352,10 +476,12 @@ public class Game {
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
+            return "W";
 
         }
         //if defender is stronger than attacker
         else if(selectedstr < destinationstr){
+            attacker.setKilledBy(defender);
             board.removePiece(attacker.getxPos(), attacker.getyPos());
             attacker.setxPos(-1);
             attacker.setyPos(-1);
@@ -368,10 +494,13 @@ public class Game {
                 aiGraveyard.add(attacker);
                 ai_charsLost++;
             }
+            return "L";
         }
 
         //if they are of equal strength destroy both
         else if(selectedstr == destinationstr){
+            defender.setKilledBy(attacker);
+            attacker.setKilledBy(defender);
             board.removePiece(attacker.getxPos(), attacker.getyPos());
             board.removePiece(defender.getxPos(), defender.getyPos());
             attacker.setxPos(-1);
@@ -396,10 +525,11 @@ public class Game {
                 aiGraveyard.add(defender);
                 ai_charsLost++;
             }
+            return "D";
 
         }
 
-
+        return "False";
     }
 
 
@@ -508,5 +638,13 @@ public class Game {
 
     public void setAi(Player ai) {
         this.ai = ai;
+    }
+
+    public boolean isGamewon() {
+        return gamewon;
+    }
+
+    public boolean isGamelost() {
+        return gamelost;
     }
 }

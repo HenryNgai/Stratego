@@ -10,6 +10,8 @@ public class BoardPiece {
     private boolean moveMultiple;
     private boolean moveable;
     private Player someplayer;
+    private boolean visible;
+    private BoardPiece killedBy;
 
 
 
@@ -63,12 +65,42 @@ public class BoardPiece {
         this.moveable = moveable;
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public BoardPiece getKilledBy() {
+        return killedBy;
+    }
+
+    public void setKilledBy(BoardPiece killedBy) {
+        this.killedBy = killedBy;
+    }
+
+    public Player getSomeplayer() {
+        return someplayer;
+    }
+
+    public void setSomeplayer(Player someplayer) {
+        this.someplayer = someplayer;
+    }
+
     public BoardPiece(String piecename, Player pieceplayer){
 
         name = piecename;
         someplayer = pieceplayer;
         xPos = -1;
         yPos = -1;
+        visible = true;
+        killedBy = null;
+
+        if(someplayer.getName().equals("Opponent")){
+            visible = false;
+        }
 
         if(name.equals("Marshall")){
             moveable = true;
