@@ -63,8 +63,15 @@ $(document).ready(function($) {
                     newY: coordy,
                     AI: isAI
                 },
-                success: function(data){
+                success: function(data, textStatus, request){
+                    if (request.getResponseHeader("endgame") == "lost") {
+                        window.location = "/lost";
+                    }
+                    if (request.getResponseHeader("endgame") == "win") {
+                         window.location = "/win";
+                    }
                     var arrayData = data.split(" ");
+                    console.log(arrayData);
                     if (arrayData[0] == "False") {
                       return_value = true;
                     }
@@ -73,14 +80,14 @@ $(document).ready(function($) {
                         $(droppedOn.children()).detach().appendTo('#pieces');
                         $(dropped).detach().appendTo(droppedOn);
 
-                        $('#pieces div').removeAttr('style');
+                        $('#pieces div').removeAttr('style').removeClass();
                         //AI MOVE
                     }
                     else if(arrayData[0] == "D"){
                         //Remove both
                         $(droppedOn.children()).detach().appendTo('#pieces');
                         $(dropped).detach().appendTo('#pieces');
-                        $('#pieces div').removeAttr('style');
+                        $('#pieces div').removeAttr('style').removeClass();
                         //AI Move
 
                     }
@@ -88,7 +95,7 @@ $(document).ready(function($) {
                         //Remove user piece.
                         alert("Loss. Your piece destroyed");
                         $(dropped).detach().appendTo('#pieces');
-                        $('#pieces div').removeAttr('style');
+                        $('#pieces div').removeAttr('style').removeClass();
 
                         //AI Move
                     }
@@ -101,6 +108,32 @@ $(document).ready(function($) {
                     }
                     else{
                         $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
+                    }
+
+                    var currAIpos = (parseInt(arrayData[1]) * 10) + parseInt(arrayData[2]);
+                    var newAIpos = (parseInt(arrayData[3]) * 10) + parseInt(arrayData[4]);
+
+
+                    if(arrayData[5] == "W"){
+                        $($('#Box'+newAIpos).children()).detach().appendTo('#pieces');
+                        $('#pieces div').removeAttr('style').removeClass();
+                        $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
+                    }
+                    else if (arrayData[5] == "D"){
+                        $($('#Box'+newAIpos).children()).detach().appendTo('#pieces');
+                        $($('#Box'+currAIpos).children()).detach().appendTo('#pieces');
+                        $('#pieces div').removeAttr('style').removeClass();
+                    }
+                    else if (arrayData[5] == "L"){
+                        $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
+                        $($('#Box'+newAIpos).children()[1]).detach().fadeOut("slow", function() { // code to run after the fadeOut is complete
+                            $(this).hide().prepend('#pieces');
+                            $('#pieces div').removeAttr('style').removeClass();
+                            $(this).show('slow');
+                        })
+                    }
+                    else{
+                        $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
                     }
                 }
             });
@@ -211,7 +244,7 @@ function init(){
 
 
 function refresh() {
-    var height = $(window).height() - ($(".logo").outerHeight() + $(".Lost").outerHeight());
+    var height = $(window).height() - $(".logo").outerHeight();
     $("#pieces").height(height);
         var x=$(window).width();
         var y=$(window).height();

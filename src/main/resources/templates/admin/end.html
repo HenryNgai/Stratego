@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/endgame.css}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"></head>
+<body>
+
+<div class="container-fluid">
+    <div class="row align-items-center h-100">
+        <div class="col-6 mx-auto">
+            <h1 th:text="${message}"></h1>
+            <button type="button" onclick="location.href='/game'" class="btn btn-md btn-warning btn-block">Play Again!</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
