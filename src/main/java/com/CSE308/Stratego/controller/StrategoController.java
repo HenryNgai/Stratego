@@ -162,11 +162,6 @@ public class StrategoController {
     
     @GetMapping("/autoMove")
     public String autoMove(){
-        //Random user move
-        //Random AI Move
-        //Return string with oldX, oldY, newX, newY, oldAIx, oldAIy, newAIx, newAIy
-
-
         String response = "";
         response = response + game.aiMovePiece(game.getUser());
         response = response + " " + game.aiMovePiece(game.getAi());
@@ -175,11 +170,6 @@ public class StrategoController {
 
     @GetMapping("/autoSetup")
     public String autoSetup(){
-        //Random user move
-        //Random AI Move
-        //Return string with oldX, oldY, newX, newY, oldAIx, oldAIy, newAIx, newAIy
-
-
         String response = game.autoSetup();
         return response;
     }
