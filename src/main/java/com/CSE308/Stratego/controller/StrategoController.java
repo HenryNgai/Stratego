@@ -159,7 +159,7 @@ public class StrategoController {
         model.addAttribute("message", "You Won!");
         return "admin/end";
     }
-    
+
     @GetMapping("/autoMove")
     public String autoMove(){
         //Random user move
