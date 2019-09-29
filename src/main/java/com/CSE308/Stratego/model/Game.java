@@ -348,7 +348,7 @@ public class Game {
 
     public String aiSetup(){
         ArrayList<BoardPiece> aiPieces = getAiPieces();
-        Collections.shuffle(this.aiPieces);
+        Collections.shuffle(aiPieces);
         String toReturn = "";
         int loop = aiPieces.size();
         for(int i=0;i<loop;i++){
@@ -363,6 +363,30 @@ public class Game {
         return toReturn;
 
     }
+
+    public String autoSetup(){
+        ArrayList<BoardPiece> userPieces = getUserPieces();
+        Collections.shuffle(userPieces);
+        String toReturn = "";
+        int loop = userPieces.size();
+        for(int i=60;i<loop+60;i++){
+            int x = i/10;
+            int y= i%10;
+            if(getPieceFromBoard(x, y) != null){
+                i--;
+                continue;
+            }
+            String name = userPieces.get(0).getName();
+            makeMove(name,-1,-1,x,y,true);
+            toReturn += name + " ";
+        }
+
+        toReturn = toReturn.trim();
+        return toReturn;
+
+    }
+
+
 
     private String interact(BoardPiece attacker, BoardPiece defender){
         //do battle/bomb/flag/etc
