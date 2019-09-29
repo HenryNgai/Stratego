@@ -41,4 +41,8 @@ public class UserService {
         return pastGameRepository.GetPastGames(email);
     }
 
+    public List<GameDetail> getGameDetail(int gameId) {
+        return gameDetailRepository.getAllGameDetail(gameId);
+    }
+
 }
