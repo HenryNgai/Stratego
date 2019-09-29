@@ -88,7 +88,13 @@ public class StrategoController {
         System.out.println(AI);
 
         String result = game.makeMove(piece, Integer.parseInt(x1), Integer.parseInt(y1), Integer.parseInt(x2), Integer.parseInt(y2), Boolean.parseBoolean(AI));
-        result = result + " 0 0 0 0";
+
+        if(game.isGamelost()){
+            //lost
+        }
+        if(game.isGamewon()){
+            //won
+        }
         return new ResponseEntity<>("result successful result",
                 HttpStatus.OK);
     }
