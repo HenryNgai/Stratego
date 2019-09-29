@@ -1,8 +1,10 @@
 package com.CSE308.Stratego.controller;
 import com.CSE308.Stratego.model.Game;
 import com.CSE308.Stratego.model.UserService;
+import com.CSE308.Stratego.model.dao.GameDetail;
 import com.CSE308.Stratego.model.dao.User;
 import com.CSE308.Stratego.model.dao.UserRepository;
+import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
 
 
 @Controller
@@ -100,15 +104,15 @@ public class StrategoController {
     public String validateMove(@RequestParam("piece") String piece,
                                        @RequestParam("previousX") String x1, @RequestParam("previousY") String y1,
                                        @RequestParam("newX") String x2, @RequestParam ("newY") String y2,
-                                       @RequestParam("AI") String AI, HttpServletResponse response) {
+                                       @RequestParam("AI") String AI, HttpServletResponse response) throws IOException {
 
         String result = game.makeMove(piece, Integer.parseInt(x1), Integer.parseInt(y1), Integer.parseInt(x2), Integer.parseInt(y2), Boolean.parseBoolean(AI));
 
         if(game.isGamelost()){
-            //lost
+            response.sendRedirect("/lost");
         }
         if(game.isGamewon()){
-            //won
+            response.sendRedirect("/won");
         }
 
         response.setContentType("text/plain");
@@ -119,13 +123,39 @@ public class StrategoController {
 
     @GetMapping("/AIsetup")
     @ResponseBody
-
     public String setupAI(HttpServletResponse response){
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
         return game.aiSetup();
 
     }
+
+    @GetMapping("/getGameDetail")
+    @ResponseBody
+    public String getGameDetail(@RequestParam ("gameId") String gameId,  HttpServletResponse response){
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        List<GameDetail> queryResult = userService.getGameDetail(gameId);
+        String temp="";
+        for (int i =0; i < queryResult.size() ; i++){
+            temp = temp + queryResult.get(i).getTeam() + " ";
+            temp = temp + queryResult.get(i).getGameId() + " ";
+            temp = temp + queryResult.get(i).getPiece() + " ";
+            temp = temp + queryResult.get(i).getWhoKilledPiece() + ",";
+        }
+        return temp;
+    }
+
+    @GetMapping("/lost")
+    public String lost(){
+        return "lost";
+    }
+
+    @GetMapping("/won")
+    public String won(){
+        return "won";
+    }
+
 
 
 }

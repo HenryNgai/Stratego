@@ -10,6 +10,40 @@ public class GameDetail {
     private int gameId;
     private String piece;
     private String whoKilledPiece;
+    private String team;
+
+    public String getTeam() {
+        return team;
+    }
+
+    public void setTeam(String team) {
+        this.team = team;
+    }
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
+
+    public String getPiece() {
+        return piece;
+    }
+
+    public void setPiece(String piece) {
+        this.piece = piece;
+    }
+
+    public String getWhoKilledPiece() {
+        return whoKilledPiece;
+    }
+
+    public void setWhoKilledPiece(String whoKilledPiece) {
+        this.whoKilledPiece = whoKilledPiece;
+    }
+
 }
 
 
