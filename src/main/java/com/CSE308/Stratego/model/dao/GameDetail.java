@@ -5,12 +5,22 @@ import javax.persistence.*;
 @Entity
 @Table(name = "GameDetail")
 public class GameDetail {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private int unikey;
     private int gameId;
     private String piece;
     private String whoKilledPiece;
     private String team;
+
+    public int getUnikey() {
+        return unikey;
+    }
+
+    public void setUnikey(int unikey) {
+        this.unikey = unikey;
+    }
 
     public String getTeam() {
         return team;

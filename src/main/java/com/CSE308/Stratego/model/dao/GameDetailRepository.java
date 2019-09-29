@@ -10,6 +10,6 @@ import java.util.List;
 @Repository("gameDetailRepository")
 public interface GameDetailRepository extends JpaRepository<GameDetail, Integer>{
     @Query(value = "SELECT u FROM GameDetail u WHERE u.gameId = :gameId")
-    public List<GameDetail> getAllGameDetail(@Param("gameId") String gameId);
+    public List<GameDetail> getAllGameDetail(@Param("gameId") int gameId);
 
 }

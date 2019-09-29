@@ -74,14 +74,14 @@ $(document).ready(function($) {
                         $(droppedOn.children()).detach().appendTo('#pieces');
                         $(dropped).detach().appendTo(droppedOn);
 
-                        $('#pieces div').removeAttr('style');
+                        $('#pieces div').removeAttr('style').removeClass();
                         //AI MOVE
                     }
                     else if(arrayData[0] == "D"){
                         //Remove both
                         $(droppedOn.children()).detach().appendTo('#pieces');
                         $(dropped).detach().appendTo('#pieces');
-                        $('#pieces div').removeAttr('style');
+                        $('#pieces div').removeAttr('style').removeClass();
                         //AI Move
 
                     }
@@ -89,7 +89,7 @@ $(document).ready(function($) {
                         //Remove user piece.
                         alert("Loss. Your piece destroyed");
                         $(dropped).detach().appendTo('#pieces');
-                        $('#pieces div').removeAttr('style');
+                        $('#pieces div').removeAttr('style').removeClass();
 
                         //AI Move
                     }
@@ -110,20 +110,20 @@ $(document).ready(function($) {
 
                     if(arrayData[5] == "W"){
                         $($('#Box'+newAIpos).children()).detach().appendTo('#pieces');
-                        $('#pieces div').removeAttr('style');
+                        $('#pieces div').removeAttr('style').removeClass();
                         $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
                     }
                     else if (arrayData[5] == "D"){
                         $($('#Box'+newAIpos).children()).detach().appendTo('#pieces');
                         $($('#Box'+currAIpos).children()).detach().appendTo('#pieces');
-                        $('#pieces div').removeAttr('style');
+                        $('#pieces div').removeAttr('style').removeClass();
                     }
                     else if (arrayData[5] == "L"){
                         $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
                         $($('#Box'+newAIpos).children()).detach().fadeOut("slow", function() { // code to run after the fadeOut is complete
                             $(this).appendTo('#pieces').fadeIn('slow');
                         })
-                        $('#pieces div').removeAttr('style');
+                        $('#pieces div').removeAttr('style').removeClass();
                     }
                     else{
                         $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
@@ -237,7 +237,7 @@ function init(){
 
 
 function refresh() {
-    var height = $(window).height() - ($(".logo").outerHeight() + $(".Lost").outerHeight());
+    var height = $(window).height() - $(".logo").outerHeight();
     $("#pieces").height(height);
         var x=$(window).width();
         var y=$(window).height();

@@ -130,12 +130,12 @@ public class StrategoController {
 
     }
 
-    @GetMapping("/getGameDetail")
+    @PostMapping("/getGameDetail")
     @ResponseBody
     public String getGameDetail(@RequestParam ("gameId") String gameId,  HttpServletResponse response){
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
-        List<GameDetail> queryResult = userService.getGameDetail(gameId);
+        List<GameDetail> queryResult = userService.getGameDetail(Integer.parseInt(gameId));
         String temp="";
         for (int i =0; i < queryResult.size() ; i++){
             temp = temp + queryResult.get(i).getTeam() + " ";
@@ -147,15 +147,15 @@ public class StrategoController {
     }
 
     @GetMapping("/lost")
-    public String lost(){
-        return "lost";
+    public String lost(Model model){
+        model.addAttribute("message", "You Lost!");
+        return "admin/end";
     }
 
     @GetMapping("/won")
-    public String won(){
-        return "won";
+    public String won(Model model){
+        model.addAttribute("message", "You Won!");
+        return "admin/end";
     }
-
-
 
 }
