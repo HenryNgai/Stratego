@@ -3,7 +3,6 @@ import com.CSE308.Stratego.model.Game;
 import com.CSE308.Stratego.model.UserService;
 import com.CSE308.Stratego.model.dao.User;
 import com.CSE308.Stratego.model.dao.UserRepository;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
