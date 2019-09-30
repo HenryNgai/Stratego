@@ -45,20 +45,40 @@ public class UserService {
         return gameDetailRepository.getAllGameDetail(gameId);
     }
 
-//    public void writeGameToDatabase(Game game, boolean userWon){
-//        if(userWon) {
-//            pastGameRepository.storePastGame(game.getUser().getName(), game.getGameId(), game.getUser().getName());
-//        }else{
-//            pastGameRepository.storePastGame(game.getUser().getName(), game.getGameId(), game.getAi().getName());
-//        }
-//        for(BoardPiece p: game.getUserGraveyard()){
-//            gameDetailRepository.storePastGame(game.getGameId(), p.getName(), p.getKilledBy().getName(), p.getSomeplayer().getName());
-//        }
-//        for(BoardPiece p: game.getAiGraveyard()){
-//            gameDetailRepository.storePastGame(game.getGameId(), p.getName(), p.getKilledBy().getName(), p.getSomeplayer().getName());
-//        }
-//        userRepository.UpdateGameId(game.getUserName(), game.getGameId()+1);
-//    }
+    public void writeGameToDatabase(Game game, boolean userWon){
+        if(userWon) {
+            PastGame p = new PastGame();
+            p.setGameId(game.getGameId());
+            p.setUsername(game.getUser().getName());
+            p.setWon(true);
+            pastGameRepository.save(p);
+        }else{
+            PastGame p = new PastGame();
+            p.setGameId(game.getGameId());
+            p.setUsername(game.getUser().getName());
+            p.setWon(false);
+            pastGameRepository.save(p);
+        }
+        for(BoardPiece p: game.getUserGraveyard()){
+            GameDetail g = new GameDetail();
+            g.setGameId(game.getGameId());
+            g.setPiece(p.getName());
+            g.setWhoKilledPiece(p.getKilledBy().getName());
+            g.setTeam(p.getSomeplayer().getName());
+            gameDetailRepository.save(g);
+        }
+        for(BoardPiece p: game.getAiGraveyard()){
+            GameDetail g = new GameDetail();
+            g.setGameId(game.getGameId());
+            g.setPiece(p.getName());
+            g.setWhoKilledPiece(p.getKilledBy().getName());
+            g.setTeam(p.getSomeplayer().getName());
+            gameDetailRepository.save(g);
+        }
+        User u = userRepository.findByEmail(game.getUserName());
+        u.setNumberofGamesPlayed(game.getGameId());
+        userRepository.save(u);
+    }
 
 
 }

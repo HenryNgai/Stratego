@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,12 +13,4 @@ import java.util.List;
 public interface GameDetailRepository extends JpaRepository<GameDetail, Integer>{
     @Query(value = "SELECT u FROM GameDetail u WHERE u.gameId = :gameId")
     public List<GameDetail> getAllGameDetail(@Param("gameId") int gameId);
-
-    @Modifying
-    @Query(value ="insert into PastGame (gameId, piece, whokilledpiece, team) values(:gameId, :piece, :whokilledpiece, team)", nativeQuery = true)
-    public void storePastGame(@Param("gameId") int gameId,
-                              @Param("piece") String piece,
-                              @Param("whokilledpiece") String whokilledpiece,
-                              @Param("team") String team);
-
 }

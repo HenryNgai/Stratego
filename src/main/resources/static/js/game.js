@@ -67,8 +67,8 @@ $(document).ready(function($) {
                     if (request.getResponseHeader("endgame") == "lost") {
                         window.location = "/lost";
                     }
-                    if (request.getResponseHeader("endgame") == "win") {
-                         window.location = "/win";
+                    if (request.getResponseHeader("endgame") == "won") {
+                         window.location = "/won";
                     }
                     var arrayData = data.split(" ");
                     console.log(arrayData);
@@ -79,61 +79,32 @@ $(document).ready(function($) {
                         // remove
                         $(droppedOn.children()).detach().appendTo('#pieces');
                         $(dropped).detach().appendTo(droppedOn);
-
-                        $('#pieces div').removeAttr('style').removeClass();
                         //AI MOVE
                     }
                     else if(arrayData[0] == "D"){
                         //Remove both
                         $(droppedOn.children()).detach().appendTo('#pieces').removeAttr("style").removeClass();
-                        $(dropped).detach().appendTo('#pieces').removeAttr("style").removeClass();
-                        //AI Move
+                        var pName = $(dropped).attr('id').replace(/[0-9]/g, '');
+                        var pNumber = $(dropped).attr('id').replace(/\D/g,'');
+                        $(dropped).remove();
+                        $('#pieces').prepend('<div id ='+pName+pNumber+'></div>');
+                        $(dropped.children()).detach().appendTo("#"+pName+pNumber);
 
                     }
                     else if(arrayData[0] == "L"){
-                        //Remove user piece.
-                        alert("Loss. Your piece destroyed");
-                        $(dropped).detach().appendTo('#pieces');
-                        $('#pieces div').removeAttr('style').removeClass();
-
-                        //AI Move
-                    }
-                    else if (arrayData[0] == "GW"){
-                        //Render win page
-
-                    }
-                    else if (arrayData[0] == "GL"){
-                        //Render lost page
+                        var pName = $(dropped).attr('id').replace(/[0-9]/g, '');
+                        var pNumber = $(dropped).attr('id').replace(/\D/g,'');
+                        $(dropped).remove();
+                        $('#pieces').prepend('<div id ='+pName+pNumber+'></div>');
+                        $(dropped.children()).detach().appendTo("#"+pName+pNumber);
                     }
                     else{
                         $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
                     }
-                    $('#pieces div').removeAttr('style').removeClass();
+
                     var currAIpos = (parseInt(arrayData[1]) * 10) + parseInt(arrayData[2]);
                     var newAIpos = (parseInt(arrayData[3]) * 10) + parseInt(arrayData[4]);
-
-
-                    if(arrayData[5] == "W"){
-                        $($('#Box'+newAIpos).children()).detach().appendTo('#pieces');
-                        $('#pieces div').removeAttr('style').removeClass();
-                        $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
-                    }
-                    else if (arrayData[5] == "D"){
-                        $($('#Box'+newAIpos).children()).detach().appendTo('#pieces');
-                        $($('#Box'+currAIpos).children()).detach().appendTo('#pieces');
-                        $('#pieces div').removeAttr('style').removeClass();
-                    }
-                    else if (arrayData[5] == "L"){
-                        $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
-                        $($('#Box'+newAIpos).children()[1]).detach().fadeOut("slow", function() { // code to run after the fadeOut is complete
-                            $(this).hide().prepend('#pieces');
-                            $('#pieces div').removeAttr('style').removeClass();
-                            $(this).show('slow');
-                        })
-                    }
-                    else{
-                        $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
-                    }
+                    AImove(currAIpos, newAIpos, arrayData[5]);
                 }
             });
 
@@ -243,7 +214,7 @@ function init(){
 
 
 function refresh() {
-    var height = $(window).height() - $(".logo").outerHeight();
+    var height = $(window).height() - ($(".logo").outerHeight() + $("#thembuttons").outerHeight());
     $("#pieces").height(height);
         var x=$(window).width();
         var y=$(window).height();
@@ -277,7 +248,6 @@ function autoSetup(){
         type: "GET",
         url: "/autoSetup",
         success: function(data){
-        alert("Ajax returned")
         var array = data.split(" ");
         var count = 0;
         var w=$('.droppable').width();
@@ -290,21 +260,97 @@ function autoSetup(){
                 count++;
             }
         }
+        $('.draggable').draggable({
+            appendTo: "body",
+            revert: function() {
+                if ($(this).hasClass('drag-revert')) {
+                  $(this).removeClass('drag-revert');
+                  return true;
+                }
+              },
+             helper: function () {
+                 $copy = $(this).clone();
+                 $copy.css({"list-style":"none","width":$(this).outerWidth()});
+                 return $copy;
+             },
+             scroll: false
+        });
         $('#pieces').html('');
         }
     });
 }
 
 
-
 function autoPlay(){
     $.ajax({
         async: false,
-        type: "GET",
+        type: "POST",
         url: "/autoMove",
-        success: function(data){
-
+        success: function(data, textStatus, request){
+            if (request.getResponseHeader("endgame") == "lost") {
+                window.location = "/lost";
+            }
+            if (request.getResponseHeader("endgame") == "won") {
+                 window.location = "/won";
+            }
+            var arrayData = data.split(" ");
+            var oldppos = (parseInt(arrayData[0]) * 10) + parseInt(arrayData[1]);
+            var newppos = (parseInt(arrayData[2]) * 10) + parseInt(arrayData[3]);
+            if(arrayData[4] == "W"){
+                $($('#Box'+newppos).children()).detach().appendTo('#pieces');
+                $($('#Box'+oldppos).children()).detach().appendTo('#Box'+newppos);
+            }
+            else if (arrayData[5] == "D"){
+                var pName = $($('#Box'+oldppos).children()).attr('id').replace(/[0-9]/g, '');
+                var pNumber = $($('#Box'+oldppos).children()).attr('id').replace(/\D/g,'');
+                var element = $($('#Box'+oldppos).children()).remove();
+                $('#pieces').prepend('<div id ='+pName+pNumber+'></div>');
+                $($(element).children()).detach().appendTo("#"+pName+pNumber);
+                $($('#Box'+newppos).children()).detach().appendTo('#pieces');
+            }
+            else if (arrayData[5] == "L"){
+                var pName = $($('#Box'+oldppos).children()).attr('id').replace(/[0-9]/g, '');
+                var pNumber = $($('#Box'+oldppos).children()).attr('id').replace(/\D/g,'');
+                var element = $($('#Box'+oldppos).children()).remove();
+                $('#pieces').prepend('<div id ='+pName+pNumber+'></div>');
+                $(element).detach().appendTo("#"+pName+pNumber);
+            }
+            else{
+                $($('#Box'+oldppos).children()).detach().appendTo('#Box'+newppos);
+            }
+            $('#pieces div').removeAttr('style').removeClass();
+            var currAIpos = (parseInt(arrayData[5]) * 10) + parseInt(arrayData[6]);
+            var newAIpos = (parseInt(arrayData[7]) * 10) + parseInt(arrayData[8]);
+            AImove(currAIpos, newAIpos, arrayData[9]);
         }
-
     });
+}
+
+function AImove(currAIpos, newAIpos, mode){
+    if(mode == "W"){
+        var pName = $($('#Box'+newAIpos).children()).attr('id').replace(/[0-9]/g, '');
+        var pNumber = $($('#Box'+newAIpos).children()).attr('id').replace(/\D/g,'');
+        var element = $($('#Box'+newAIpos).children()).remove();
+        $('#pieces').prepend('<div id ='+pName+pNumber+'></div>');
+        $($(element).children()).detach().appendTo("#"+pName+pNumber);
+        $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
+    }
+    else if (mode == "D"){
+        var pName = $($('#Box'+newAIpos).children()).attr('id').replace(/[0-9]/g, '');
+        var pNumber = $($('#Box'+newAIpos).children()).attr('id').replace(/\D/g,'');
+        var element = $($('#Box'+newAIpos).children()).remove();
+        $('#pieces').prepend('<div id ='+pName+pNumber+'></div>');
+        $($(element).children()).detach().appendTo("#"+pName+pNumber);
+        $($('#Box'+currAIpos).children()).detach().appendTo('#pieces');
+    }
+    else if (mode == "L"){
+        $($('#Box'+currAIpos).children()).detach().fadeOut("slow", function() { // code to run after the fadeOut is complete
+                $(this).prependTo('#pieces').fadeIn('slow');
+                $('#pieces div').removeAttr('style').removeClass();
+        })
+    }
+    else{
+        $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
+    }
+    $('#pieces div').removeAttr('style').removeClass();
 }

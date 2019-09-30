@@ -29,8 +29,10 @@
         </div>
         <div class="col-3 no-float side-menu">
             <img th:src="@{/images/logo.png}" class="img-fluid logo">
-            <button type="button" onclick="autoPlay()" class="btn btn-lg btn-primary btn-block">Auto-Play</button>
-            <button type="button" onclick="autoSetup()" class="btn btn-lg btn-primary btn-block">Auto-Setup</button>
+            <div id="thembuttons">
+                <button type="button" onclick="autoPlay()" class="btn btn-lg btn-primary btn-block">Auto-Play</button>
+                <button type="button" onclick="autoSetup()" class="btn btn-lg btn-primary btn-block">Auto-Setup</button>
+            </div>
             <div id="pieces"></div>
         </div>
     </div>
