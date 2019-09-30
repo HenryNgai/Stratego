@@ -101,10 +101,11 @@ $(document).ready(function($) {
                     else{
                         $(dropped).detach().css({position:"absolute",width:w, height:h}).appendTo(droppedOn);
                     }
-
-                    var currAIpos = (parseInt(arrayData[1]) * 10) + parseInt(arrayData[2]);
-                    var newAIpos = (parseInt(arrayData[3]) * 10) + parseInt(arrayData[4]);
-                    AImove(currAIpos, newAIpos, arrayData[5]);
+                    setTimeout(function() {
+                        var currAIpos = (parseInt(arrayData[1]) * 10) + parseInt(arrayData[2]);
+                        var newAIpos = (parseInt(arrayData[3]) * 10) + parseInt(arrayData[4]);
+                        AImove(currAIpos, newAIpos, arrayData[5]);
+                    }, 750);
                 }
             });
 
@@ -136,7 +137,7 @@ function init(){
         var w=$('.droppable').width();
         var h=$('.droppable').height();
         for (var i = 0; i<array.length;i++){
-            $('#Box'+i).append('<div class="draggable" id ='+array[i]+count+'></div>');
+            $('#Box'+i).append('<div id ='+array[i]+count+'></div>');
             $('#'+array[i]+count).prepend($('<img>',{class:"img-fluid",src:'../images/'+array[i]+'.png'}));
             $('#'+array[i]+count).css({"position":"absolute","width":w, "height":h});
             count++;
@@ -294,13 +295,14 @@ function autoPlay(){
                  window.location = "/won";
             }
             var arrayData = data.split(" ");
+            console.log(arrayData);
             var oldppos = (parseInt(arrayData[0]) * 10) + parseInt(arrayData[1]);
             var newppos = (parseInt(arrayData[2]) * 10) + parseInt(arrayData[3]);
             if(arrayData[4] == "W"){
                 $($('#Box'+newppos).children()).detach().appendTo('#pieces');
                 $($('#Box'+oldppos).children()).detach().appendTo('#Box'+newppos);
             }
-            else if (arrayData[5] == "D"){
+            else if (arrayData[4] == "D"){
                 var pName = $($('#Box'+oldppos).children()).attr('id').replace(/[0-9]/g, '');
                 var pNumber = $($('#Box'+oldppos).children()).attr('id').replace(/\D/g,'');
                 var element = $($('#Box'+oldppos).children()).remove();
@@ -308,7 +310,7 @@ function autoPlay(){
                 $($(element).children()).detach().appendTo("#"+pName+pNumber);
                 $($('#Box'+newppos).children()).detach().appendTo('#pieces');
             }
-            else if (arrayData[5] == "L"){
+            else if (arrayData[4] == "L"){
                 var pName = $($('#Box'+oldppos).children()).attr('id').replace(/[0-9]/g, '');
                 var pNumber = $($('#Box'+oldppos).children()).attr('id').replace(/\D/g,'');
                 var element = $($('#Box'+oldppos).children()).remove();
@@ -319,9 +321,13 @@ function autoPlay(){
                 $($('#Box'+oldppos).children()).detach().appendTo('#Box'+newppos);
             }
             $('#pieces div').removeAttr('style').removeClass();
-            var currAIpos = (parseInt(arrayData[5]) * 10) + parseInt(arrayData[6]);
-            var newAIpos = (parseInt(arrayData[7]) * 10) + parseInt(arrayData[8]);
-            AImove(currAIpos, newAIpos, arrayData[9]);
+
+            setTimeout(function() {
+                  var currAIpos = (parseInt(arrayData[5]) * 10) + parseInt(arrayData[6]);
+                  var newAIpos = (parseInt(arrayData[7]) * 10) + parseInt(arrayData[8]);
+                  AImove(currAIpos, newAIpos, arrayData[9]);
+            }, 750);
+
         }
     });
 }
