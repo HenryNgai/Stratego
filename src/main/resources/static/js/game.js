@@ -77,12 +77,16 @@ $(document).ready(function($) {
                     }
                     else if(arrayData[0] == "W"){
                         // remove
+                        var pName = $(droppedOn.children()).attr('id').replace(/[0-9]/g, '');
+                        $($(droppedOn.children())).children('img').attr("src", "../images/"+pName+".png")
                         $(droppedOn.children()).detach().appendTo('#pieces');
                         $(dropped).detach().appendTo(droppedOn);
                         //AI MOVE
                     }
                     else if(arrayData[0] == "D"){
                         //Remove both
+                        var pName = $(droppedOn.children()).attr('id').replace(/[0-9]/g, '');
+                        $($(droppedOn.children())).children('img').attr("src", "../images/"+pName+".png")
                         $(droppedOn.children()).detach().appendTo('#pieces').removeAttr("style").removeClass();
                         var pName = $(dropped).attr('id').replace(/[0-9]/g, '');
                         var pNumber = $(dropped).attr('id').replace(/\D/g,'');
@@ -92,6 +96,8 @@ $(document).ready(function($) {
 
                     }
                     else if(arrayData[0] == "L"){
+                        var pName = $(droppedOn.children()).attr('id').replace(/[0-9]/g, '');
+                        $($(droppedOn.children())).children('img').attr("src", "../images/"+pName+".png")
                         var pName = $(dropped).attr('id').replace(/[0-9]/g, '');
                         var pNumber = $(dropped).attr('id').replace(/\D/g,'');
                         $(dropped).remove();
@@ -138,8 +144,8 @@ function init(){
         var h=$('.droppable').height();
         for (var i = 0; i<array.length;i++){
             $('#Box'+i).append('<div id ='+array[i]+count+'></div>');
-            $('#'+array[i]+count).prepend($('<img>',{class:"img-fluid",src:'../images/'+array[i]+'.png'}));
-            $('#'+array[i]+count).css({"position":"absolute","width":w, "height":h});
+            $('#'+array[i]+count).prepend($('<img>',{class:"img-fluid",src:'../images/Blank.png'}));
+            $('#'+array[i]+count).css({"position":"absolute"});
             count++;
         }
     });
@@ -299,10 +305,14 @@ function autoPlay(){
             var oldppos = (parseInt(arrayData[0]) * 10) + parseInt(arrayData[1]);
             var newppos = (parseInt(arrayData[2]) * 10) + parseInt(arrayData[3]);
             if(arrayData[4] == "W"){
+                var pName = $($('#Box'+newppos).children()).attr('id').replace(/[0-9]/g, '');
+                $($('#Box'+newppos).children()).children('img').attr("src", "../images/"+pName+".png")
                 $($('#Box'+newppos).children()).detach().appendTo('#pieces');
                 $($('#Box'+oldppos).children()).detach().appendTo('#Box'+newppos);
             }
             else if (arrayData[4] == "D"){
+                var pName = $($('#Box'+newppos).children()).attr('id').replace(/[0-9]/g, '');
+                $($('#Box'+newppos).children()).children('img').attr("src", "../images/"+pName+".png")
                 var pName = $($('#Box'+oldppos).children()).attr('id').replace(/[0-9]/g, '');
                 var pNumber = $($('#Box'+oldppos).children()).attr('id').replace(/\D/g,'');
                 var element = $($('#Box'+oldppos).children()).remove();
@@ -311,6 +321,8 @@ function autoPlay(){
                 $($('#Box'+newppos).children()).detach().appendTo('#pieces');
             }
             else if (arrayData[4] == "L"){
+                var pName = $($('#Box'+newppos).children()).attr('id').replace(/[0-9]/g, '');
+                $($('#Box'+newppos).children()).children('img').attr("src", "../images/"+pName+".png")
                 var pName = $($('#Box'+oldppos).children()).attr('id').replace(/[0-9]/g, '');
                 var pNumber = $($('#Box'+oldppos).children()).attr('id').replace(/\D/g,'');
                 var element = $($('#Box'+oldppos).children()).remove();
@@ -334,6 +346,8 @@ function autoPlay(){
 
 function AImove(currAIpos, newAIpos, mode){
     if(mode == "W"){
+        var pName = $($('#Box'+currAIpos).children()).attr('id').replace(/[0-9]/g, '');
+        $($('#Box'+currAIpos).children()).children('img').attr("src", "../images/"+pName+".png")
         var pName = $($('#Box'+newAIpos).children()).attr('id').replace(/[0-9]/g, '');
         var pNumber = $($('#Box'+newAIpos).children()).attr('id').replace(/\D/g,'');
         var element = $($('#Box'+newAIpos).children()).remove();
@@ -342,6 +356,8 @@ function AImove(currAIpos, newAIpos, mode){
         $($('#Box'+currAIpos).children()).detach().appendTo('#Box'+newAIpos);
     }
     else if (mode == "D"){
+        var pName = $($('#Box'+currAIpos).children()).attr('id').replace(/[0-9]/g, '');
+        $($('#Box'+currAIpos).children()).children('img').attr("src", "../images/"+pName+".png")
         var pName = $($('#Box'+newAIpos).children()).attr('id').replace(/[0-9]/g, '');
         var pNumber = $($('#Box'+newAIpos).children()).attr('id').replace(/\D/g,'');
         var element = $($('#Box'+newAIpos).children()).remove();
@@ -350,6 +366,8 @@ function AImove(currAIpos, newAIpos, mode){
         $($('#Box'+currAIpos).children()).detach().appendTo('#pieces');
     }
     else if (mode == "L"){
+        var pName = $($('#Box'+currAIpos).children()).attr('id').replace(/[0-9]/g, '');
+        $($('#Box'+currAIpos).children()).children('img').attr("src", "../images/"+pName+".png")
         $($('#Box'+currAIpos).children()).detach().fadeOut("slow", function() { // code to run after the fadeOut is complete
                 $(this).prependTo('#pieces').fadeIn('slow');
                 $('#pieces div').removeAttr('style').removeClass();
