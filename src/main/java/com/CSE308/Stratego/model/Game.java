@@ -49,7 +49,7 @@ public class Game {
 
         board = new GameBoard();
         startTime = new Date();
-        this.gameId = gameId;
+        this.gameId = gameId + 1;
         this.userName = userName;
 
         setUpPhase = true;
@@ -338,9 +338,9 @@ public class Game {
         BoardPiece piece = getPieceFromBoard(newX, newY);
         if(piece != null){
             if(player.getColor().equals("Blue")) {
-                if(!piece.getPlayer().getName().equals("Opponent")) return false;
+                if(piece.getPlayer().getColor().equals("Blue")) return false;
             }else{
-                if(piece.getPlayer().getName().equals("Opponent")) return false;
+                if(piece.getPlayer().getColor().equals("Red")) return false;
             }
         }
         return true;
