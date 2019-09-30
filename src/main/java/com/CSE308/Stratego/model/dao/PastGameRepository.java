@@ -11,7 +11,4 @@ import java.util.List;
 public interface PastGameRepository extends JpaRepository<PastGame, Integer>{
     @Query(value = "SELECT u FROM PastGame u WHERE u.username = :email")
     public List<PastGame> GetPastGames(@Param("email") String email);
-
-    @Query()
-
 }
