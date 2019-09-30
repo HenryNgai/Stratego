@@ -506,6 +506,7 @@ public class Game {
         //if a non miner piece attacks bomb, destroy the piece
         if(!selectedpiece.equals("Miner") && destinationpiece.equals("Bomb")){
             attacker.setKilledBy(defender);
+            defender.setKilledBy(attacker);
             board.removePiece(attacker.getxPos(), attacker.getyPos());
             board.removePiece(defender.getxPos(), defender.getyPos());
             attacker.setxPos(-1);
