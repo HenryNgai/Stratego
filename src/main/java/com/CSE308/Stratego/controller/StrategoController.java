@@ -150,12 +150,14 @@ public class StrategoController {
 
     @GetMapping("/lost")
     public String lost(Model model){
+        userService.writeGameToDatabase(game, false);
         model.addAttribute("message", "You Lost!");
         return "admin/end";
     }
 
     @GetMapping("/won")
     public String won(Model model){
+        userService.writeGameToDatabase(game, true);
         model.addAttribute("message", "You Won!");
         return "admin/end";
     }

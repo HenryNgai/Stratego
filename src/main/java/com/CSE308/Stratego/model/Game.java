@@ -49,7 +49,7 @@ public class Game {
 
         board = new GameBoard();
         startTime = new Date();
-        this.gameId = gameId;
+        this.gameId = gameId + 1;
         this.userName = userName;
 
         setUpPhase = true;
