@@ -39,7 +39,7 @@ public class Game {
 
     public Game(String userName, int gameId){
 
-        user = new Player("Basim", "Blue");
+        user = new Player(userName, "Blue");
         ai = new Player("Opponent", "Red");
 
         userPieces = new ArrayList<BoardPiece>();
