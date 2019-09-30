@@ -7,5 +7,7 @@ body, .container-fluid {
 }
 
 h1{
-padding: 69px;
+    padding: 70px;
+    color: white;
+    text-align:center;
 }

@@ -150,27 +150,34 @@ public class StrategoController {
 
     @GetMapping("/lost")
     public String lost(Model model){
-      //  userService.writeGameToDatabase(game, false);
+        userService.writeGameToDatabase(game, false);
         model.addAttribute("message", "You Lost!");
         return "admin/end";
     }
 
     @GetMapping("/won")
     public String won(Model model){
-      //  userService.writeGameToDatabase(game, true);
+        userService.writeGameToDatabase(game, true);
         model.addAttribute("message", "You Won!");
         return "admin/end";
     }
     
-    @GetMapping("/autoMove")
+    @PostMapping("/autoMove")
     @ResponseBody
-    public String autoMove(HttpServletResponse response){
+    public ResponseEntity<String> autoMove(HttpServletResponse response){
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
         String result = "";
         result = result + game.aiMovePiece(game.getUser());
         result = result + " " + game.aiMovePiece(game.getAi());
-        return result;
+        HttpHeaders headers = new HttpHeaders();
+        if(game.isGamelost()){
+            headers.add("endgame", "lost");
+        }
+        if(game.isGamewon()){
+            headers.add("endgame", "won");
+        }
+        return new ResponseEntity<>(result,headers, HttpStatus.OK);
     }
 
     @GetMapping("/autoSetup")
