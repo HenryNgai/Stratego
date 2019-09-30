@@ -160,15 +160,22 @@ public class StrategoController {
         return "admin/end";
     }
     
-    @GetMapping("/autoMove")
+    @PostMapping("/autoMove")
     @ResponseBody
-    public String autoMove(HttpServletResponse response){
+    public ResponseEntity<String> autoMove(HttpServletResponse response){
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
         String result = "";
         result = result + game.aiMovePiece(game.getUser());
         result = result + " " + game.aiMovePiece(game.getAi());
-        return result;
+        HttpHeaders headers = new HttpHeaders();
+        if(game.isGamelost()){
+            headers.add("endgame", "lost");
+        }
+        if(game.isGamewon()){
+            headers.add("endgame", "won");
+        }
+        return new ResponseEntity<>(result,headers, HttpStatus.OK);
     }
 
     @GetMapping("/autoSetup")
