@@ -69,7 +69,8 @@ public class StrategoController {
     }
 
     @GetMapping("/home")
-    public String homePage(Model model) {
+    public ModelAndView homePage(Model model) {
+        ModelAndView modelandview= new ModelAndView();
         String email ="";
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
@@ -78,11 +79,13 @@ public class StrategoController {
             email = principal.toString();
         }
         model.addAttribute("results", userService.getAllGameResults(email));
-        return "/admin/home";
+        modelandview.setViewName("/admin/home");
+        return modelandview;
     }
 
     @GetMapping("/game")
-    public String Game() {
+    public ModelAndView Game() {
+        ModelAndView modelandview= new ModelAndView();
         String email ="";
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
@@ -92,12 +95,15 @@ public class StrategoController {
         }
 
         game = new Game(email,userService.getGameID(email));
-        return "/admin/game";
+        modelandview.setViewName("/admin/game");
+        return modelandview;
     }
 
     @GetMapping("/access-denied")
-    public String accessDenied() {
-        return "/error/access-denied";
+    public ModelAndView accessDenied() {
+        ModelAndView modelandview = new ModelAndView();
+        modelandview.setViewName("/error/access-denied");
+        return modelandview;
     }
 
     @PostMapping("/validate-move")
@@ -149,17 +155,21 @@ public class StrategoController {
     }
 
     @GetMapping("/lost")
-    public String lost(Model model){
+    public ModelAndView lost(Model model){
+        ModelAndView modelandview = new ModelAndView();
         userService.writeGameToDatabase(game, false);
         model.addAttribute("message", "You Lost!");
-        return "admin/end";
+        modelandview.setViewName("/admin/end");
+        return modelandview;
     }
 
     @GetMapping("/won")
-    public String won(Model model){
+    public ModelAndView won(Model model){
+        ModelAndView modelandview = new ModelAndView();
         userService.writeGameToDatabase(game, true);
         model.addAttribute("message", "You Won!");
-        return "admin/end";
+        modelandview.setViewName("/admin/end");
+        return modelandview;
     }
     
     @PostMapping("/autoMove")
