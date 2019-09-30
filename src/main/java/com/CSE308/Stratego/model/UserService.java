@@ -45,4 +45,20 @@ public class UserService {
         return gameDetailRepository.getAllGameDetail(gameId);
     }
 
+//    public void writeGameToDatabase(Game game, boolean userWon){
+//        if(userWon) {
+//            pastGameRepository.storePastGame(game.getUser().getName(), game.getGameId(), game.getUser().getName());
+//        }else{
+//            pastGameRepository.storePastGame(game.getUser().getName(), game.getGameId(), game.getAi().getName());
+//        }
+//        for(BoardPiece p: game.getUserGraveyard()){
+//            gameDetailRepository.storePastGame(game.getGameId(), p.getName(), p.getKilledBy().getName(), p.getSomeplayer().getName());
+//        }
+//        for(BoardPiece p: game.getAiGraveyard()){
+//            gameDetailRepository.storePastGame(game.getGameId(), p.getName(), p.getKilledBy().getName(), p.getSomeplayer().getName());
+//        }
+//        userRepository.UpdateGameId(game.getUserName(), game.getGameId()+1);
+//    }
+
+
 }
