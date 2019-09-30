@@ -67,8 +67,8 @@ $(document).ready(function($) {
                     if (request.getResponseHeader("endgame") == "lost") {
                         window.location = "/lost";
                     }
-                    if (request.getResponseHeader("endgame") == "win") {
-                         window.location = "/win";
+                    if (request.getResponseHeader("endgame") == "won") {
+                         window.location = "/won";
                     }
                     var arrayData = data.split(" ");
                     console.log(arrayData);
@@ -290,8 +290,8 @@ function autoPlay(){
             if (request.getResponseHeader("endgame") == "lost") {
                 window.location = "/lost";
             }
-            if (request.getResponseHeader("endgame") == "win") {
-                 window.location = "/win";
+            if (request.getResponseHeader("endgame") == "won") {
+                 window.location = "/won";
             }
             var arrayData = data.split(" ");
             var oldppos = (parseInt(arrayData[0]) * 10) + parseInt(arrayData[1]);
