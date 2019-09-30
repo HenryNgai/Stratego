@@ -176,7 +176,7 @@ public class Game {
                 if(isEnemyPresent(newX, newY, p.getPlayer())){
                     String aiResult = movePieceOnBoard(x, y, newX, newY);
                     response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
-                    break;
+                    return response;
                 }
             }
 
@@ -187,7 +187,7 @@ public class Game {
                 if(isEnemyPresent(newX, newY, p.getPlayer())){
                     String aiResult = movePieceOnBoard(x, y, newX, newY);
                     response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
-                    break;
+                    return response;
                 }
             }
             //check right
@@ -197,7 +197,7 @@ public class Game {
                 if(isEnemyPresent(newX, newY, p.getPlayer())){
                     String aiResult = movePieceOnBoard(x, y, newX, newY);
                     response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
-                    break;
+                    return response;
                 }
             }
             //check up
@@ -207,7 +207,7 @@ public class Game {
                 if(isEnemyPresent(newX, newY, p.getPlayer())){
                     String aiResult = movePieceOnBoard(x, y, newX, newY);
                     response += x + " " + y + " " + newX + " " + newY + " " + aiResult;
-                    break;
+                    return response;
                 }
             }
 
