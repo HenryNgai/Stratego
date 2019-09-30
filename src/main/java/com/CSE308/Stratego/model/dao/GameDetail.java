@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class GameDetail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int unikey;
     private int gameId;
     private String piece;
