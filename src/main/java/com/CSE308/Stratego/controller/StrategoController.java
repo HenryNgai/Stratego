@@ -79,7 +79,7 @@ public class StrategoController {
             email = principal.toString();
         }
         model.addAttribute("results", userService.getAllGameResults(email));
-        modelandview.setViewName("/admin/home");
+        modelandview.setViewName("admin/home");
         return modelandview;
     }
 
@@ -95,14 +95,14 @@ public class StrategoController {
         }
 
         game = new Game(email,userService.getGameID(email));
-        modelandview.setViewName("/admin/game");
+        modelandview.setViewName("admin/game");
         return modelandview;
     }
 
     @GetMapping("/access-denied")
     public ModelAndView accessDenied() {
         ModelAndView modelandview = new ModelAndView();
-        modelandview.setViewName("/error/access-denied");
+        modelandview.setViewName("error/access-denied");
         return modelandview;
     }
 
@@ -159,7 +159,7 @@ public class StrategoController {
         ModelAndView modelandview = new ModelAndView();
         userService.writeGameToDatabase(game, false);
         model.addAttribute("message", "You Lost!");
-        modelandview.setViewName("/admin/end");
+        modelandview.setViewName("admin/end");
         return modelandview;
     }
 
@@ -168,7 +168,7 @@ public class StrategoController {
         ModelAndView modelandview = new ModelAndView();
         userService.writeGameToDatabase(game, true);
         model.addAttribute("message", "You Won!");
-        modelandview.setViewName("/admin/end");
+        modelandview.setViewName("admin/end");
         return modelandview;
     }
     
