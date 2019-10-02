@@ -79,7 +79,7 @@ public class StrategoController {
             email = principal.toString();
         }
         model.addAttribute("results", userService.getAllGameResults(email));
-        modelandview.setViewName("/admin/home");
+        modelandview.setViewName("admin/home");
         return modelandview;
     }
 
@@ -95,14 +95,14 @@ public class StrategoController {
         }
 
         game = new Game(email,userService.getGameID(email));
-        modelandview.setViewName("/admin/game");
+        modelandview.setViewName("admin/game");
         return modelandview;
     }
 
     @GetMapping("/access-denied")
     public ModelAndView accessDenied() {
         ModelAndView modelandview = new ModelAndView();
-        modelandview.setViewName("/error/access-denied");
+        modelandview.setViewName("error/access-denied");
         return modelandview;
     }
 
@@ -143,13 +143,21 @@ public class StrategoController {
     public String getGameDetail(@RequestParam ("gameId") String gameId,  HttpServletResponse response){
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
-        List<GameDetail> queryResult = userService.getGameDetail(Integer.parseInt(gameId));
+
+        String email ="";
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails)principal).getUsername();
+        } else {
+            email = principal.toString();
+        }
+
+        List<GameDetail> queryResult = userService.getGameDetail(email, Integer.parseInt(gameId));
         String temp="";
         for (int i =0; i < queryResult.size() ; i++){
-            temp = temp + queryResult.get(i).getTeam() + " ";
-            temp = temp + queryResult.get(i).getGameId() + " ";
+            temp = temp + queryResult.get(i).getColor() + " ";
             temp = temp + queryResult.get(i).getPiece() + " ";
-            temp = temp + queryResult.get(i).getWhoKilledPiece() + ",";
+            temp = temp + queryResult.get(i).getWhoKilledPiece()+",";
         }
         return temp;
     }
@@ -159,7 +167,7 @@ public class StrategoController {
         ModelAndView modelandview = new ModelAndView();
         userService.writeGameToDatabase(game, false);
         model.addAttribute("message", "You Lost!");
-        modelandview.setViewName("/admin/end");
+        modelandview.setViewName("admin/end");
         return modelandview;
     }
 
@@ -168,7 +176,7 @@ public class StrategoController {
         ModelAndView modelandview = new ModelAndView();
         userService.writeGameToDatabase(game, true);
         model.addAttribute("message", "You Won!");
-        modelandview.setViewName("/admin/end");
+        modelandview.setViewName("admin/end");
         return modelandview;
     }
     
