@@ -163,6 +163,7 @@ public class Game {
         //aggressive AI implementation
         //find spot that has enemy piece in it and attack it
         for(BoardPiece p: piecesOnBoard) {
+            if(p != null && !p.isMoveable()) continue;
             int x = p.getxPos();
             int y = p.getyPos();
             int newX = x;

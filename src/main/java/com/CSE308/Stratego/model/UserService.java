@@ -41,8 +41,8 @@ public class UserService {
         return pastGameRepository.GetPastGames(email);
     }
 
-    public List<GameDetail> getGameDetail(int gameId) {
-        return gameDetailRepository.getAllGameDetail(gameId);
+    public List<GameDetail> getGameDetail(String email, int gameId) {
+        return gameDetailRepository.getAllGameDetail(email, gameId);
     }
 
     public void writeGameToDatabase(Game game, boolean userWon){
@@ -59,12 +59,16 @@ public class UserService {
             p.setWon(false);
             pastGameRepository.save(p);
         }
+
+        String PlayerName = game.getUserGraveyard().get(0).getSomeplayer().getName();
+
         for(BoardPiece p: game.getUserGraveyard()){
             GameDetail g = new GameDetail();
             g.setGameId(game.getGameId());
             g.setPiece(p.getName());
             g.setWhoKilledPiece(p.getKilledBy().getName());
-            g.setTeam(p.getSomeplayer().getName());
+            g.setTeam(PlayerName);
+            g.setColor("Blue");
             gameDetailRepository.save(g);
         }
         for(BoardPiece p: game.getAiGraveyard()){
@@ -72,7 +76,8 @@ public class UserService {
             g.setGameId(game.getGameId());
             g.setPiece(p.getName());
             g.setWhoKilledPiece(p.getKilledBy().getName());
-            g.setTeam(p.getSomeplayer().getName());
+            g.setTeam(PlayerName);
+            g.setColor("Red");
             gameDetailRepository.save(g);
         }
         User u = userRepository.findByEmail(game.getUserName());

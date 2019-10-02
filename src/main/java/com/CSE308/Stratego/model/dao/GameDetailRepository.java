@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository("gameDetailRepository")
 public interface GameDetailRepository extends JpaRepository<GameDetail, Integer>{
-    @Query(value = "SELECT u FROM GameDetail u WHERE u.gameId = :gameId")
-    public List<GameDetail> getAllGameDetail(@Param("gameId") int gameId);
+    @Query(value = "SELECT u FROM GameDetail u WHERE u.gameId = :gameId AND u.team = :email ")
+    public List<GameDetail> getAllGameDetail(@Param("email") String email, @Param("gameId") int gameId);
 }
