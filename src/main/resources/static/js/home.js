@@ -16,7 +16,6 @@ function GetGameDetails(GAMEID) {
                 $("#GameDetailsBody #row"+i).append('<td scope="row">'+NewArray[0]+'</td>');
                 $("#GameDetailsBody #row"+i).append('<td>'+NewArray[1]+'</td>');
                 $("#GameDetailsBody #row"+i).append('<td>'+NewArray[2]+'</td>');
-                $("#GameDetailsBody #row"+i).append('<td>'+NewArray[3]+'</td>');
             }
 
         }
