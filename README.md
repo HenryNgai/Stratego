@@ -1,7 +1,7 @@
-# team_orange_hw1
+# Stratego
 Stratego Web Application
 
-**Things Left To Do**
+**Features**
 
 
 * <del> Account Login Required 
